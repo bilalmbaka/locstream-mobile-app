@@ -27,6 +27,7 @@ class AppConstants {
   static const baseUrl = String.fromEnvironment('baseUrl');
 
   //local storage keys
+  static const userKey = "userProfile";
   static const authTokenKey = "authToken";
   static const refreshTokenKey = "refreshToken";
 

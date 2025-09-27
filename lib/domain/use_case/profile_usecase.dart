@@ -14,6 +14,14 @@ class ProfileUseCase {
     return profile;
   }
 
+  Future<User?> getProfileFromLocal() async {
+    return await profileRepo.fetchProfileOffline();
+  }
+
+  Future<void> clearOfflineData() async {
+    return await profileRepo.clearOfflineProfile();
+  }
+
   Future<User> updateProfile(ProfileDto profileDto) async {
     final profile = await profileRepo.updateProfile(profileDto);
 
@@ -24,10 +32,7 @@ class ProfileUseCase {
     await profileRepo.updatePushNotificationToken(token);
   }
 
-  Future<List<User>> findUsers({
-    String? searchString,
-    int startAt = 1,
-  }) async {
+  Future<List<User>> findUsers({String? searchString, int startAt = 1}) async {
     return await profileRepo.findUsers(
       searchString: searchString,
       startAt: startAt,

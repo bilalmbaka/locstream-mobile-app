@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:locstream/core/utils/base_state.dart';
 import 'package:locstream/view_models/auth/login_viewmodel.dart';
 import 'package:locstream/view_models/auth/reset_password_viewmodel.dart';
 import 'package:locstream/view_models/auth/signup_otp_viewmodel.dart';
@@ -18,12 +20,10 @@ import 'domain/use_case/auth_usecase.dart';
 
 final _authUseCase = AuthUseCase(
   authRepo: AuthRepository(),
-);
-
-final _profileUseCase = ProfileUseCase(
   profileRepo: ProfileRepository(),
 );
 
+final _profileUseCase = ProfileUseCase(profileRepo: ProfileRepository());
 
 final signupViewModel = NotifierProvider<SignupViewmodel, SignupState>(
   () => SignupViewmodel(authUseCase: _authUseCase),
@@ -39,22 +39,22 @@ final profileViewModel = NotifierProvider<ProfileViewmodel, ProfileState>(
 
 final editProfileViewModel =
     NotifierProvider<EditProfileViewmodel, EditProfileState>(
-  () => EditProfileViewmodel(profileUseCase: _profileUseCase),
-);
+      () => EditProfileViewmodel(profileUseCase: _profileUseCase),
+    );
 
-final loginViewModel = NotifierProvider<LoginViewmodel, LoginState>(
-  () => LoginViewmodel(loginUsecase: _authUseCase),
+final loginViewModel = NotifierProvider<LoginViewModel, LoginState>(
+  () => LoginViewModel(loginUseCase: _authUseCase),
 );
 
 final resetPasswordViewModel =
     NotifierProvider<ResetPasswordViewmodel, ResetPasswordState>(
-  () => ResetPasswordViewmodel(authUseCase: _authUseCase),
-);
+      () => ResetPasswordViewmodel(authUseCase: _authUseCase),
+    );
 
 final changePasswordViewModel =
     NotifierProvider<ChangePasswordViewmodel, ChangePasswordState>(
-  () => ChangePasswordViewmodel(authUseCase: _authUseCase),
-);
+      () => ChangePasswordViewmodel(authUseCase: _authUseCase),
+    );
 
 final fetchingMoreUsersState = ValueNotifier<bool>(false);
 
@@ -62,9 +62,12 @@ final findUsersViewModel = NotifierProvider<FindUsersViewmodel, FindUsersState>(
   () => FindUsersViewmodel(profileUsecase: _profileUseCase),
 );
 
-
 final pushNotificationsViewModel =
-    NotifierProvider<PushNotificationViewModel, void>(() =>
-        PushNotificationViewModel(
-            pushNotificationService: PushNotificationService(),
-            profileUseCase: _profileUseCase));
+    NotifierProvider<PushNotificationViewModel, void>(
+      () => PushNotificationViewModel(
+        pushNotificationService: PushNotificationService(),
+        profileUseCase: _profileUseCase,
+      ),
+    );
+
+final isDialogLoading = ValueNotifier<BaseState>(BaseState.initial());

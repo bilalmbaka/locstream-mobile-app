@@ -69,6 +69,7 @@ class AppTheme {
       brightness: Brightness.dark,
     ),
     primaryColor: AppColors.primaryColor,
+    dialogTheme: DialogThemeData(backgroundColor: AppColors.dialogColor),
     fontFamily: AppConstants.nunitoFontFamily,
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.transparent,
@@ -76,9 +77,7 @@ class AppTheme {
       foregroundColor: AppColors.transparent,
     ),
     scaffoldBackgroundColor: AppColors.primaryColor,
-    progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: AppColors.white
-    ),
+    progressIndicatorTheme: ProgressIndicatorThemeData(color: AppColors.white),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         shape: WidgetStateProperty.all(
@@ -109,7 +108,7 @@ class AppTheme {
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      outlineBorder: BorderSide(color: AppColors.stroke),
+      outlineBorder: BorderSide(color: AppColors.inputBorder),
       hintStyle: TextStyle(
         fontSize: 12,
         color: Colors.grey,
@@ -117,15 +116,19 @@ class AppTheme {
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: AppColors.blurColor),
+        borderSide: BorderSide(color: AppColors.inputBorder),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: AppColors.blurColor),
+        borderSide: BorderSide(color: AppColors.inputBorder),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: BorderSide(color: AppColors.primaryColor80),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: AppColors.blurColor),
+        borderSide: BorderSide(color: AppColors.text3),
       ),
     ),
   );

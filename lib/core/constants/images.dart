@@ -31,4 +31,8 @@ class Images {
   static final filter = "filter_data".pngIcon;
   static final lawsuit = "lawsuit".pngIcon;
   static final authorization = "authorization".pngImage;
+  static final loadingGif = "loading".gif;
+  static final dataGif = "data".gif;
+  static final noInternet = "no-connection".gif;
+  static final verified = "verified".gif;
 }

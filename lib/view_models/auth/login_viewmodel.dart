@@ -8,10 +8,11 @@ import '../../domain/use_case/auth_usecase.dart';
 
 typedef LoginState = BaseState<AuthResponseModel>;
 
-class LoginViewmodel extends Notifier<LoginState> {
-  final AuthUseCase loginUsecase;
+class LoginViewModel extends Notifier<LoginState> {
+  final AuthUseCase loginUseCase;
 
-  LoginViewmodel({required this.loginUsecase});
+
+  LoginViewModel({required this.loginUseCase});
 
   @override
   LoginState build() {
@@ -21,7 +22,8 @@ class LoginViewmodel extends Notifier<LoginState> {
   Future<void> login(LoginDto loginDto) async {
     try {
       state = BaseState.loading();
-      final response = await loginUsecase.login(loginDto);
+
+      final response = await loginUseCase.login(loginDto);
       state = BaseState.success(response);
     } catch (e) {
       final errorMessage = AppExceptionHandler.handleException(e);
@@ -32,7 +34,7 @@ class LoginViewmodel extends Notifier<LoginState> {
 
   Future<void> deleteAuthTokens() async {
     try {
-      await loginUsecase.deleteAuthTokens();
+      await loginUseCase.deleteAuthTokens();
     } catch (e) {
       //Do Nothing;
     }

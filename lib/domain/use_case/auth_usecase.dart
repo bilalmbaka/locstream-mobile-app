@@ -1,14 +1,15 @@
+import 'package:locstream/data/repository/profile_repository.dart';
+
 import '../../data/model/signup_response_model.dart';
 import '../../data/model/user_model.dart';
 import '../../data/repository/authentication_repository.dart';
 import '../entities/auth_dto.dart';
 
 class AuthUseCase {
-  AuthUseCase({
-    required this.authRepo,
-  });
+  AuthUseCase({required this.authRepo, required this.profileRepo});
 
   final AuthRepository authRepo;
+  final ProfileRepository profileRepo;
 
   Future<void> signup(SignupDto signupDto) async {
     await authRepo.signup(signupDto);
@@ -27,6 +28,8 @@ class AuthUseCase {
   Future<AuthResponseModel> login(LoginDto loginDto) async {
     final response = await authRepo.login(loginDto);
 
+    profileRepo.saveProfile(response.user);
+
     return response;
   }
 
@@ -34,10 +37,14 @@ class AuthUseCase {
     await authRepo.resetPassword(resetPasswordDto);
   }
 
-  Future<User> changePassword(
-      {required String oldPassword, required String newPassword}) async {
+  Future<User> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
     final response = await authRepo.changePassword(
-        oldPassword: oldPassword, newPassword: newPassword);
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+    );
 
     await authRepo.saveTokens(response.accessToken, response.refreshToken);
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:locstream/views/screens/home.dart';
+import 'package:locstream/views/widgets/loading_dialog.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../core/constants/strings.dart';
@@ -47,12 +49,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     ref.listen(loginViewModel, _loginListener);
 
     return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
+      body: LoadingDialog(
+        state: ref.watch(loginViewModel),
+        dismissOverlay: () => ref.invalidate(loginViewModel),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
             padding: AppHelpers.defaultPadding(top: 70),
             child: SizedBox(
-                width: double.infinity, child: Center(child: _body()))),
+              width: double.infinity,
+              child: Center(child: _body()),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -75,26 +84,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: InkWell(
               onTap: () {
                 NavigationService.pushToScreen(
-                    context: context, routeName: ResetPasswordScreen.routeName);
+                  context: context,
+                  routeName: ResetPasswordScreen.routeName,
+                );
               },
               child: AppTextField(
                 text: AppStrings.forgotPassword,
                 textStyle: AppTextStyle(
-                        context: context,
-                        fontSize: 12,
-                        color: AppColors.complimentary)
-                    .fw600(),
+                  context: context,
+                  fontSize: 12,
+                  color: AppColors.complimentary,
+                ).fw600(),
               ),
             ),
           ),
           40.h,
           Consumer(
             builder: (context, ref, child) {
-              final loginState = ref.watch(loginViewModel);
+              // final loginState = ref.watch(loginViewModel);
 
               return PlainButton(
                 text: AppStrings.continueText,
-                isLoading: loginState.isLoading,
+                // isLoading: loginState.isLoading,
                 onTap: _login,
               );
             },
@@ -112,23 +123,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 onTap: () {
                   if (AppHelpers.isWeb(context)) {
                     NavigationService.jumpToScreen(
-                        context: context, routeName: SignupScreen.routeName);
+                      context: context,
+                      routeName: SignupScreen.routeName,
+                    );
                   } else {
                     NavigationService.pushToScreen(
-                        context: context, routeName: SignupScreen.routeName);
+                      context: context,
+                      routeName: SignupScreen.routeName,
+                    );
                   }
                 },
                 child: AppTextField(
                   text: AppStrings.getStared,
                   textStyle: AppTextStyle(
-                          context: context,
-                          fontSize: 13,
-                          color: AppColors.complimentary)
-                      .fw900(),
+                    context: context,
+                    fontSize: 13,
+                    color: AppColors.complimentary,
+                  ).fw900(),
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -157,7 +172,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _login() {
-
     AppHelpers.dismissKeyboard(context);
 
     if (!_formKey.currentState!.validate()) {
@@ -165,23 +179,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
 
     AppHelpers.resetState(ref);
-    ref.read(loginViewModel.notifier).login(LoginDto(
-          email: _emailAddressTextController.text,
-          password: _passwordTextController.text,
-        ));
+    ref
+        .read(loginViewModel.notifier)
+        .login(
+          LoginDto(
+            email: _emailAddressTextController.text,
+            password: _passwordTextController.text,
+          ),
+        );
+
   }
 
   void _loginListener(LoginState? previous, LoginState next) {
     if (next.isSuccess) {
       ref.read(profileViewModel.notifier).profile = next.data!.user;
 
-      // NavigationService.jumpToScreen(
-      //     context: context, routeName: Dashboard.routeName);
-    }
 
-    if (next.isError) {
-      AppHelpers.showToast(
-          context, next.errorMessage ?? AppStrings.somethingWentWrong);
+      NavigationService.jumpToScreen(
+        context: context,
+        routeName: Home.routeName,
+      );
     }
   }
+
 }

@@ -17,6 +17,8 @@ extension StringExtensions on String {
 
   String get svgImage => "assets/images/svg/$this.svg";
 
+  String get gif => "assets/animated/gifs/$this.gif";
+
   //File source
   bool get isRemote => startsWith("http");
   bool get isAnAsset => contains("assets");

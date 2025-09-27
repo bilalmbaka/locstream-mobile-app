@@ -40,5 +40,11 @@ class BaseState<T> {
 
   bool get isSuccess => status == Status.success;
 
-  bool get isError => status == Status.error;
+  bool get isError =>
+      status == Status.error ||
+      status == Status.blocked ||
+      status == Status.unverified ||
+      status == Status.noNetwork;
+
+  bool get isNoNetwork => status == Status.noNetwork;
 }
