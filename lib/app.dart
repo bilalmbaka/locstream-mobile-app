@@ -19,8 +19,9 @@ class _MyAppState extends State<MyApp> {
     return ProviderScope(
       child: MaterialApp.router(
         title: AppStrings.appName,
-        theme: AppTheme.lightTheme,
+        theme: AppTheme.darkTheme,
         routerConfig: routes,
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

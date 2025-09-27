@@ -1,10 +1,3 @@
-/*
-Created by: Mbaka bilal <mbakabilal.t@gmail.com>
-Created on: 15,June,2025
-Updated by: Mbaka bilal <mbakabilal.t@gmail.com>
-Updated on: 15,June,2025
-*/
-
 extension StringExtensions on String {
   String firstLetterToUpperCase() =>
       isEmpty ? "" : replaceRange(0, 1, this[0].toUpperCase());

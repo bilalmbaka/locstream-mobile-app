@@ -1,4 +1,4 @@
-package com.thepocketmerlin.locstream.locstream
+package com.thepocketmerlin
 
 import io.flutter.embedding.android.FlutterActivity
 

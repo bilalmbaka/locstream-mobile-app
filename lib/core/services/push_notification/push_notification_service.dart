@@ -30,6 +30,8 @@ class PushNotificationService {
   /// Stream for detecting FCM token refresh
   Stream<String> get tokenRefreshStream => _firebaseMessaging.onTokenRefresh;
 
+
+
   Future<bool> _requestPermission() async {
     try {
       final permission = await _firebaseMessaging.requestPermission(

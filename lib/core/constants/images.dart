@@ -30,4 +30,5 @@ class Images {
   static final sandClock = "sand-clock".pngIcon;
   static final filter = "filter_data".pngIcon;
   static final lawsuit = "lawsuit".pngIcon;
+  static final authorization = "authorization".pngImage;
 }

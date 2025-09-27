@@ -21,7 +21,7 @@ class NotificationService {
 
   Future<void> setupChannels() async {
     try {
-      final permissionGranted = await _requestPermission();
+      final permissionGranted = await requestPermission();
 
       if (!permissionGranted) {
         NotificationPermissionException(
@@ -68,7 +68,7 @@ class NotificationService {
     }
   }
 
-  Future<bool> _requestPermission() async {
+  Future<bool> requestPermission() async {
     try {
       final permission = await _localNotifications
           .resolvePlatformSpecificImplementation<

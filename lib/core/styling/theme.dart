@@ -5,59 +5,128 @@ import 'colors.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
-      primaryColor: AppColors.primaryColor,
-      fontFamily: AppConstants.nunitoFontFamily,
-      appBarTheme: AppBarTheme(backgroundColor: AppColors.white),
-      scaffoldBackgroundColor: AppColors.white,
-      elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-              shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20))),
-              backgroundColor:
-                  WidgetStateProperty.resolveWith((Set<WidgetState> state) {
-                if (state.contains(WidgetState.disabled)) {
-                  return AppColors.primaryColor.withOpacity(.5);
-                }
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+    primaryColor: AppColors.primaryColor,
+    fontFamily: AppConstants.nunitoFontFamily,
+    appBarTheme: AppBarTheme(backgroundColor: AppColors.white),
+    scaffoldBackgroundColor: AppColors.white,
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        ),
+        backgroundColor: WidgetStateProperty.resolveWith((
+          Set<WidgetState> state,
+        ) {
+          if (state.contains(WidgetState.disabled)) {
+            return AppColors.primaryColor.withOpacity(.5);
+          }
 
-                return AppColors.primaryColor;
-              }),
-              fixedSize: WidgetStateProperty.all(Size(double.infinity, 45)))),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-          style: ButtonStyle(
-              shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20))),
-              backgroundColor: WidgetStateProperty.all(AppColors.transparent),
-              side: WidgetStateProperty.all(
-                  BorderSide(color: AppColors.primaryColor)),
-              fixedSize: WidgetStateProperty.all(Size(double.infinity, 45)))),
-      inputDecorationTheme: InputDecorationTheme(
-        outlineBorder: BorderSide(
-          color: AppColors.stroke,
+          return AppColors.primaryColor;
+        }),
+        fixedSize: WidgetStateProperty.all(Size(double.infinity, 45)),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
-        hintStyle: TextStyle(
-          fontSize: 12,
-          color: Colors.grey,
-          fontWeight: FontWeight.w300,
+        backgroundColor: WidgetStateProperty.all(AppColors.transparent),
+        side: WidgetStateProperty.all(
+          BorderSide(color: AppColors.primaryColor),
         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(
-            color: AppColors.stroke,
-          ),
+        fixedSize: WidgetStateProperty.all(Size(double.infinity, 45)),
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      outlineBorder: BorderSide(color: AppColors.stroke),
+      hintStyle: TextStyle(
+        fontSize: 12,
+        color: Colors.grey,
+        fontWeight: FontWeight.w300,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: BorderSide(color: AppColors.stroke),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: BorderSide(color: AppColors.stroke),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: BorderSide(color: AppColors.stroke),
+      ),
+    ),
+  );
+
+  static final darkTheme = ThemeData(
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColors.primaryColor,
+      brightness: Brightness.dark,
+    ),
+    primaryColor: AppColors.primaryColor,
+    fontFamily: AppConstants.nunitoFontFamily,
+    appBarTheme: AppBarTheme(
+      backgroundColor: AppColors.transparent,
+      elevation: 0,
+      foregroundColor: AppColors.transparent,
+    ),
+    scaffoldBackgroundColor: AppColors.primaryColor,
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: AppColors.white
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(
-            color: AppColors.stroke,
-          ),
+        backgroundColor: WidgetStateProperty.resolveWith((
+          Set<WidgetState> state,
+        ) {
+          if (state.contains(WidgetState.disabled)) {
+            return AppColors.ladingPageGradientGreen.withOpacity(.5);
+          }
+
+          return AppColors.ladingPageGradientGreen;
+        }),
+        fixedSize: WidgetStateProperty.all(Size(double.infinity, 45)),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
-        disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(
-            color: AppColors.stroke,
-          ),
+        backgroundColor: WidgetStateProperty.all(AppColors.transparent),
+        side: WidgetStateProperty.all(
+          BorderSide(color: AppColors.ladingPageGradientGreen),
         ),
-      ));
+        fixedSize: WidgetStateProperty.all(Size(double.infinity, 45)),
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      outlineBorder: BorderSide(color: AppColors.stroke),
+      hintStyle: TextStyle(
+        fontSize: 12,
+        color: Colors.grey,
+        fontWeight: FontWeight.w300,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: BorderSide(color: AppColors.blurColor),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: BorderSide(color: AppColors.blurColor),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: BorderSide(color: AppColors.blurColor),
+      ),
+    ),
+  );
 }
