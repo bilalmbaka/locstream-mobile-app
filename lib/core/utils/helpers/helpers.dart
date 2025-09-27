@@ -19,11 +19,12 @@ import '../../styling/colors.dart';
 import 'dialog_helpers.dart';
 
 class AppHelpers {
-  static EdgeInsets defaultPadding(
-      {double left = 20,
-      double top = 10,
-      double right = 20,
-      double bottom = 50}) {
+  static EdgeInsets defaultPadding({
+    double left = 20,
+    double top = 10,
+    double right = 20,
+    double bottom = 50,
+  }) {
     return EdgeInsets.only(left: left, top: top, right: right, bottom: bottom);
   }
 
@@ -39,26 +40,31 @@ class AppHelpers {
     RefreshCallback? refresh,
     ScrollPhysics? physics,
   }) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return RefreshIndicator(
-        onRefresh: refresh ?? () => Future.value(),
-        child: SingleChildScrollView(
-          physics: physics ?? AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
-            child: Padding(
-                padding: padding ?? AppHelpers.defaultPadding(), child: child),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return RefreshIndicator(
+          onRefresh: refresh ?? () => Future.value(),
+          child: SingleChildScrollView(
+            physics: physics ?? AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Padding(
+                padding: padding ?? AppHelpers.defaultPadding(),
+                child: child,
+              ),
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   static void showToast(BuildContext context, String message) {
     Fluttertoast.showToast(
       msg: message,
       backgroundColor: Theme.of(context).iconTheme.color,
+      textColor: Colors.black,
     );
   }
 
@@ -77,9 +83,10 @@ class AppHelpers {
     bool allowMultiples = false,
   }) async {
     final media = await FilePicker.platform.pickFiles(
-        allowedExtensions: fileTypes,
-        type: FileType.custom,
-        allowMultiple: allowMultiples);
+      allowedExtensions: fileTypes,
+      type: FileType.custom,
+      allowMultiple: allowMultiples,
+    );
 
     if (media == null) return [];
 
@@ -92,34 +99,40 @@ class AppHelpers {
     AppHelpers.showToast(context, "Refresh token expired");
 
     NavigationService.jumpToScreen(
-        context: context, routeName: LoginScreen.routeName);
+      context: context,
+      routeName: LoginScreen.routeName,
+    );
   }
 
   static Future<void> resetState(WidgetRef ref) async {
     await ref.read(loginViewModel.notifier).deleteAuthTokens();
+    await ref.read(profileViewModel.notifier).reset();
   }
 
   static void overLayDisabledBanner({required String message}) {
     final context = AppConstants.rootNavigatorKey.currentContext!;
 
     DialogHelpers.showAppDialog(
-        context: context,
+      context: context,
+      dismissible: false,
+      child: InfoDialog(
+        title: AppStrings.information,
         dismissible: false,
-        child: InfoDialog(
-          title: AppStrings.information,
-          dismissible: false,
-          information: message,
-          actionButton: PlainButton(
-            onTap: () {
-              //Open website to contact support
-            },
-            text: AppStrings.contactSupport,
-          ),
-        ));
+        information: message,
+        actionButton: PlainButton(
+          onTap: () {
+            //Open website to contact support
+          },
+          text: AppStrings.contactSupport,
+        ),
+      ),
+    );
   }
 
-  static Widget defaultShimmer(
-      {required BuildContext context, required Widget child}) {
+  static Widget defaultShimmer({
+    required BuildContext context,
+    required Widget child,
+  }) {
     return Shimmer.fromColors(
       baseColor: AppColors.stroke,
       highlightColor: Colors.white,
@@ -131,8 +144,10 @@ class AppHelpers {
     return controller.position.pixels == (controller.position.maxScrollExtent);
   }
 
-  static Future<void> copyToClipboard(
-      {required BuildContext context, required String text}) async {
+  static Future<void> copyToClipboard({
+    required BuildContext context,
+    required String text,
+  }) async {
     await Clipboard.setData(ClipboardData(text: text));
     AppHelpers.showToast(context, "Copied to clipboard");
   }

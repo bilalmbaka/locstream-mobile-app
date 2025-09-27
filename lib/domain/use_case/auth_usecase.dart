@@ -1,6 +1,5 @@
 import 'package:locstream/data/repository/profile_repository.dart';
 
-import '../../data/model/signup_response_model.dart';
 import '../../data/model/user_model.dart';
 import '../../data/repository/authentication_repository.dart';
 import '../entities/auth_dto.dart';
@@ -15,8 +14,10 @@ class AuthUseCase {
     await authRepo.signup(signupDto);
   }
 
-  Future<AuthResponseModel> verifyOtp(String otp, SignupDto signupDto) async {
-    final response = await authRepo.verifyOtp(otp, signupDto);
+  Future<User> verifyAccount(String otp, String email) async {
+    final response = await authRepo.verifyAccount(otp, email);
+
+    await profileRepo.saveProfile(response);
 
     return response;
   }
@@ -25,10 +26,10 @@ class AuthUseCase {
     await authRepo.requestOtp(email);
   }
 
-  Future<AuthResponseModel> login(LoginDto loginDto) async {
+  Future<User> login(LoginDto loginDto) async {
     final response = await authRepo.login(loginDto);
 
-    profileRepo.saveProfile(response.user);
+    profileRepo.saveProfile(response);
 
     return response;
   }
@@ -37,21 +38,21 @@ class AuthUseCase {
     await authRepo.resetPassword(resetPasswordDto);
   }
 
-  Future<User> changePassword({
+  Future<void> changePassword({
     required String oldPassword,
     required String newPassword,
   }) async {
-    final response = await authRepo.changePassword(
+    return await authRepo.changePassword(
       oldPassword: oldPassword,
       newPassword: newPassword,
     );
-
-    await authRepo.saveTokens(response.accessToken, response.refreshToken);
-
-    return response.user;
   }
 
   Future<void> deleteAuthTokens() async {
     await authRepo.deleteAuthTokens();
+  }
+
+  Future<List<String>> suggestUserNames({required String email}) async {
+    return await authRepo.suggestUserNames(email: email);
   }
 }

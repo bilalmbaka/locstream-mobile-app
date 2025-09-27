@@ -23,9 +23,10 @@ final authRoutes = <GoRoute>[
     name: ResetPasswordScreen.routeName,
     pageBuilder: (context, state) {
       return PageTransitionAnimationHelper.animateGoRoutePageTransition(
-          state: state,
-          type: PageTransitionStyle.rightToLeft,
-          child: ResetPasswordScreen());
+        state: state,
+        type: PageTransitionStyle.rightToLeft,
+        child: ResetPasswordScreen(),
+      );
     },
   ),
   GoRoute(
@@ -36,6 +37,7 @@ final authRoutes = <GoRoute>[
   GoRoute(
     path: SignupEmailVerificationScreen.path,
     name: SignupEmailVerificationScreen.routeName,
-    builder: (context, routeState) => SignupEmailVerificationScreen(),
+    builder: (context, routeState) =>
+        SignupEmailVerificationScreen(routeState.extra as String),
   ),
 ];

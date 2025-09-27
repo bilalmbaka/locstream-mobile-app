@@ -15,6 +15,8 @@ enum PageTransitionStyle {
 }
 
 class NavigationService<T extends Object?> {
+  static bool canPop({required BuildContext context}) => context.canPop();
+
   static Future<T?> pushToScreen<T>({
     required BuildContext context,
     required String routeName,

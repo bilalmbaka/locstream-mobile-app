@@ -1,3 +1,5 @@
+import 'package:locstream/core/error_handlers/exceptions.dart';
+
 import '../enums.dart';
 import 'helpers/helpers.dart';
 
@@ -24,11 +26,12 @@ class BaseState<T> {
   factory BaseState.error(
     String errorMessage, {
     T? data,
+    Object? e,
     bool showToast = false,
   }) {
     AppHelpers.printToLog(errorMessage.toString());
     return BaseState<T>(
-      status: Status.error,
+      status: e is NoNetworkException ? Status.noNetwork : Status.error ,
       errorMessage: errorMessage,
       data: data,
     );

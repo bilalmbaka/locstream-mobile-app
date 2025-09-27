@@ -11,7 +11,8 @@ class AppStrings {
   static const enterPassword = 'Enter password';
   static const asterics = '********';
   static const forgotPassword = 'Forgot password?';
-  static const userName = 'userName';
+  static const userName = 'Username';
+  static const jhonDoe = 'jhondoe';
 
   static const continueText = 'Continue';
   static const dontHaveAnAccount = "Dont' have an account?";
@@ -31,6 +32,10 @@ class AppStrings {
   static const resetPassword = 'Reset password';
   static const enterEmailToResetPassword =
       'Enter your registered email address to reset your password.';
+
+  static const createUserName = "Create username";
+  static const setUserName =
+      'Enter your unique username, must be at least 5 characters long, contain letters and numbers only.';
 
   static const createPassword = 'Create password';
   static const createSecurePassword = 'Create a secure password';
@@ -98,6 +103,8 @@ class AppStrings {
   static const connectionTimeout = 'Connection timeout';
   static const invalidEmail = 'Invalid email address';
   static const invalidName = 'Invalid name';
+  static const invalidUserName = 'Invalid username';
+  static const userNameTooShort = 'Username too short';
   static const invalidPhoneNumber = 'Invalid phone number';
 
   //

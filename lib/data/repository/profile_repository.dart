@@ -3,7 +3,6 @@ import 'package:locstream/data/data_sources/remote_data_sources/profile_remote_d
 import 'package:locstream/data/model/user_model.dart';
 import 'package:locstream/domain/entities/profile_dto.dart';
 
-
 class ProfileRepository {
   final _remoteDataSource = ProfileRemoteDataSource();
   final _localDataSource = ProfileLocalDataSource();
@@ -43,5 +42,9 @@ class ProfileRepository {
 
   Future<void> updatePushNotificationToken(String token) async {
     return await _remoteDataSource.updatePushNotificationToken(token: token);
+  }
+
+  Future<bool> checkUserNameAvailability(String userName) async {
+    return await _remoteDataSource.checkIfUserNameAvailable(userName: userName);
   }
 }

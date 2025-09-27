@@ -5,14 +5,14 @@ import '../../model/user_model.dart';
 
 class ProfileRemoteDataSource {
   final ApiService apiService = ApiService(
-    baseUrl: "${AppConstants.baseUrl}/user",
+    baseUrl: '${AppConstants.baseUrl}/user',
   );
 
   Future<User> getProfile() async {
     try {
-      final response = await apiService.get("/profile");
+      final response = await apiService.get('/profile');
 
-      return User.fromJson(response["data"]);
+      return User.fromJson(response['data']);
     } catch (e) {
       rethrow;
     }
@@ -22,35 +22,32 @@ class ProfileRemoteDataSource {
     try {
       final formData = await dto.toFormData();
 
-      final response = await apiService.patch("/profile", data: formData);
+      final response = await apiService.patch('/profile', data: formData);
 
-      return User.fromJson(response["data"]);
+      return User.fromJson(response['data']);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<List<User>> findUsers({
-    String? searchString,
-    int startAt = 1,
-  }) async {
+  Future<List<User>> findUsers({String? searchString, int startAt = 1}) async {
     try {
       final response = await apiService.get(
-        "/find",
+        '/find',
         queryParams: searchString != null && searchString.trim().isNotEmpty
             ? {
-                "userName": searchString,
-                "firstName": searchString,
-                "lastName": searchString,
-                "startAt": startAt,
-                "endAt": startAt + AppConstants.paginationJump,
+                'userName': searchString,
+                'startAt': startAt,
+                'endAt': startAt + AppConstants.paginationJump,
               }
             : null,
       );
 
-      return List<User>.from(response["data"]["users"].map((e) {
-        return User.fromJson(e);
-      }));
+      return List<User>.from(
+        response['data']['users'].map((e) {
+          return User.fromJson(e);
+        }),
+      );
     } catch (e) {
       rethrow;
     }
@@ -58,8 +55,23 @@ class ProfileRemoteDataSource {
 
   Future<void> updatePushNotificationToken({required String token}) async {
     try {
-      await apiService
-          .patch("/profile", data: {"pushNotificationToken": token});
+      await apiService.patch(
+        '/profile',
+        data: {'pushNotificationToken': token},
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> checkIfUserNameAvailable({required String userName}) async {
+    try {
+      await apiService.get(
+        '/username-free',
+        queryParams: {'userName': userName.trim().toLowerCase()},
+      );
+
+      return true;
     } catch (e) {
       rethrow;
     }

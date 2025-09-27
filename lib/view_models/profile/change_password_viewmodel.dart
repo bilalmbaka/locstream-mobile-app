@@ -5,24 +5,28 @@ import '../../core/utils/base_state.dart';
 import '../../data/model/user_model.dart';
 import '../../domain/use_case/auth_usecase.dart';
 
-typedef ChangePasswordState = BaseState<User>;
+typedef ChangePasswordState = BaseState<void>;
 
-class ChangePasswordViewmodel extends Notifier<ChangePasswordState> {
+class ChangePasswordViewModel extends Notifier<ChangePasswordState> {
   final AuthUseCase authUseCase;
 
-  ChangePasswordViewmodel({required this.authUseCase});
+  ChangePasswordViewModel({required this.authUseCase});
 
   @override
   ChangePasswordState build() {
     return BaseState.initial();
   }
 
-  Future<void> changePassword(
-      {required String oldPassword, required String newPassword}) async {
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
     try {
       state = BaseState.loading();
       final profile = await authUseCase.changePassword(
-          oldPassword: oldPassword, newPassword: newPassword);
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      );
       state = BaseState.success(profile);
     } catch (e) {
       final errorMessage = AppExceptionHandler.handleException(e);

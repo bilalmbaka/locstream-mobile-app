@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:locstream/core/styling/colors.dart';
 
 import '../../../core/services/navigation_service.dart';
 import '../../../core/styling/text_style.dart';
 import '../app_text_field.dart';
 
 class AppAppBar<T> extends StatelessWidget implements PreferredSizeWidget {
-  const AppAppBar({
-    super.key,
-    this.returnValue,
-    this.title,
-    this.actions,
-  });
+  const AppAppBar({super.key, this.returnValue, this.title, this.actions});
 
   final T? returnValue;
   final String? title;
@@ -27,13 +23,19 @@ class AppAppBar<T> extends StatelessWidget implements PreferredSizeWidget {
               textStyle: AppTextStyle(context: context).fw900(),
             )
           : null,
-      leading: GestureDetector(
-          onTap: () =>
-              NavigationService.pop<T?>(context: context, data: returnValue),
-          child: Icon(
-            Icons.arrow_back_ios,
-            size: 22,
-          )),
+      leading: (NavigationService.canPop(context: context))
+          ? GestureDetector(
+              onTap: () => NavigationService.pop<T?>(
+                context: context,
+                data: returnValue,
+              ),
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: 22,
+                color: AppColors.white,
+              ),
+            )
+          : null,
       actions: actions,
     );
   }

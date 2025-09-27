@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:locstream/views/screens/authentication/set_username.dart';
+import 'package:locstream/views/widgets/app_bars/general_app_bar.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../core/constants/strings.dart';
@@ -12,10 +14,12 @@ import '../../widgets/app_text_field.dart';
 import '../../widgets/otp_field.dart';
 
 class SignupEmailVerificationScreen extends ConsumerStatefulWidget {
-  static const path = "/$routeName";
-  static const routeName = "signup-email-verification";
+  static const path = '/$routeName';
+  static const routeName = 'signup-email-verification';
 
-  const SignupEmailVerificationScreen({super.key});
+  const SignupEmailVerificationScreen(this.emailAddress, {super.key});
+
+  final String emailAddress;
 
   @override
   ConsumerState<SignupEmailVerificationScreen> createState() =>
@@ -29,9 +33,11 @@ class _SignupEmailVerificationScreenState
     ref.listen(signupOtpViewModel, _handleStateChange);
 
     return Scaffold(
+      appBar: AppAppBar(),
       body: SingleChildScrollView(
-          padding: AppHelpers.defaultPadding(top: 60),
-          child: SizedBox(width: double.infinity, child: _body())),
+        padding: AppHelpers.defaultPadding(),
+        child: SizedBox(width: double.infinity, child: _body()),
+      ),
     );
   }
 
@@ -48,7 +54,7 @@ class _SignupEmailVerificationScreenState
             ),
             AppConstants.mediumYSpace,
             AppTextField(
-              text: AppStrings.enterEmailOtp,
+              text: '${AppStrings.enterEmailOtp} ${widget.emailAddress}',
               textStyle: AppTextStyle(context: context, fontSize: 16).fw500(),
             ),
             AppConstants.extraLargeYSpace,
@@ -58,18 +64,18 @@ class _SignupEmailVerificationScreenState
 
                 return OtpField(
                   onOtpFilled: (String otp) {
-                    ref.read(signupOtpViewModel.notifier).verifyOtp(otp);
+                    ref
+                        .read(signupOtpViewModel.notifier)
+                        .verifyOtp(otp, widget.emailAddress);
                   },
                   isLoading: signupOtpState.isLoading,
                   incorrectOtp: signupOtpState.isError,
                   onTapResendOtp: () {
-                    ref.read(signupOtpViewModel.notifier).requestOtp(
-                        email: ref
-                            .read(signupOtpViewModel.notifier)
-                            .signupDto!
-                            .email);
+                    ref
+                        .read(signupOtpViewModel.notifier)
+                        .requestOtp(email: widget.emailAddress);
                   },
-                  otpLength: 6,
+                  otpLength: 4,
                 );
               },
             ),
@@ -85,15 +91,19 @@ class _SignupEmailVerificationScreenState
         throw Exception(AppStrings.somethingWentWrong);
       }
 
-      ref.read(profileViewModel.notifier).profile = next.data!.user;
+      ref.read(profileViewModel.notifier).profile = next.data!;
 
-      // NavigationService.jumpToScreen(
-      //     context: context, routeName: Dashboard.routeName);
+      NavigationService.jumpToScreen(
+        context: context,
+        routeName: SetUserNameScreen.routeName,
+      );
     }
 
     if (next.isError) {
       AppHelpers.showToast(
-          context, next.errorMessage ?? AppStrings.somethingWentWrong);
+        context,
+        next.errorMessage ?? AppStrings.somethingWentWrong,
+      );
     }
   }
 }

@@ -33,6 +33,10 @@ class AppInputForm extends StatefulWidget {
     this.hintStyle,
     this.prefixIconConstraints,
     this.titleStyle,
+    this.suffixIcon,
+    this.suffixIconContraints,
+    this.autoValidateMode,
+    this.errorText,
   });
 
   final TextEditingController controller;
@@ -61,6 +65,10 @@ class AppInputForm extends StatefulWidget {
   final bool expands;
   final int maxLines;
   final TextStyle? titleStyle;
+  final Widget? suffixIcon;
+  final BoxConstraints? suffixIconContraints;
+  final AutovalidateMode? autoValidateMode;
+  final String? errorText;
 
   @override
   State<AppInputForm> createState() => _AppInputFormState();
@@ -89,7 +97,9 @@ class _AppInputFormState extends State<AppInputForm> {
             padding: const EdgeInsets.only(bottom: 10.0),
             child: AppTextField(
               text: widget.title!,
-              textStyle: widget.titleStyle ?? AppTextStyle(context: context, fontSize: 14).fw500(),
+              textStyle:
+                  widget.titleStyle ??
+                  AppTextStyle(context: context, fontSize: 14).fw500(),
             ),
           ),
         Flexible(
@@ -98,7 +108,9 @@ class _AppInputFormState extends State<AppInputForm> {
             height: widget.height,
             child: TextFormField(
               controller: widget.controller,
-              style: widget.textStyle ??
+
+              style:
+                  widget.textStyle ??
                   AppTextStyle(context: context, fontSize: 14).fw500(),
               enabled: widget.enabled,
               expands: widget.expands,
@@ -108,30 +120,40 @@ class _AppInputFormState extends State<AppInputForm> {
               textAlign: widget.textAlign ?? TextAlign.start,
               focusNode: widget.focusNode,
               obscureText: _hidden,
+
               maxLength: widget.maxLength,
               onChanged: widget.onChanged,
               keyboardType: widget.keyboardType,
               inputFormatters: widget.inputFormatters,
               validator: widget.validator,
+              autovalidateMode: widget.autoValidateMode,
               decoration: InputDecoration(
+                errorText: widget.errorText,
+                // isDense: false,
                 // filled: true,
                 // fillColor: Colors.blue,
                 hintStyle: widget.hintStyle,
                 prefixIconConstraints: widget.prefixIconConstraints,
+
                 prefixIcon: widget.prefix == null
                     ? null
                     : Padding(
                         padding: EdgeInsets.all(10),
                         child: widget.prefix!,
                       ),
-                suffixIcon: widget.hideText
-                    ? GestureDetector(
-                        onTap: () => setState(() {
+                suffixIconConstraints: widget.suffixIconContraints,
+                suffixIcon:
+                    widget.suffixIcon ??
+                    (widget.hideText
+                        ? GestureDetector(
+                            onTap: () => setState(() {
                               _hidden = !_hidden;
                             }),
-                        child: Icon(
-                            _hidden ? Icons.visibility : Icons.visibility_off))
-                    : null,
+                            child: Icon(
+                              _hidden ? Icons.visibility : Icons.visibility_off,
+                            ),
+                          )
+                        : null),
                 focusedBorder: widget.focusedBorder,
                 border: widget.border,
                 enabledBorder: widget.enabledBorder,

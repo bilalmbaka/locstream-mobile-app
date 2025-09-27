@@ -31,6 +31,20 @@ class AppTextValidators {
     return null;
   }
 
+  static String? isUserName(dynamic str) {
+    final empty = isEmpty(str);
+
+    if (empty != null) return empty;
+
+    final nameRegex = RegExp(r'^[a-zA-Z0-9\s]+$');
+
+    if (!nameRegex.hasMatch(str)) return AppStrings.invalidUserName;
+
+    if (str.length < 5) return AppStrings.userNameTooShort;
+
+    return null;
+  }
+
   static String? isPhoneNumber(dynamic str) {
     final empty = isEmpty(str);
 

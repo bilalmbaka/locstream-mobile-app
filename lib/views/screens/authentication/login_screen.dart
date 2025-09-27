@@ -192,7 +192,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   void _loginListener(LoginState? previous, LoginState next) {
     if (next.isSuccess) {
-      ref.read(profileViewModel.notifier).profile = next.data!.user;
+      ref.read(profileViewModel.notifier).profile = next.data!;
 
 
       NavigationService.jumpToScreen(

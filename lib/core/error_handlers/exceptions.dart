@@ -11,8 +11,28 @@ class LocationException implements Exception {
 }
 
 class ApiException implements Exception {
-  const ApiException(
-      {required this.message, required this.exception, this.statusCode});
+  const ApiException({
+    required this.message,
+    required this.exception,
+    this.statusCode,
+  });
+
+  final String message;
+  final Object exception;
+  final int? statusCode;
+
+  @override
+  String toString() {
+    return message;
+  }
+}
+
+class NoNetworkException extends ApiException {
+  const NoNetworkException({
+    this.message = 'Network unreachable',
+    required this.exception,
+    this.statusCode,
+  }) : super(message: message, exception: exception);
 
   final String message;
   final Object exception;
@@ -63,8 +83,10 @@ class LocalNotificationException implements Exception {
 }
 
 class NotificationPermissionException extends PushNotificationException {
-  NotificationPermissionException(
-      {required super.message, required super.exception});
+  NotificationPermissionException({
+    required super.message,
+    required super.exception,
+  });
 }
 
 class NotificationException implements Exception {

@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:locstream/data/model/user_model.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../core/services/api_service.dart';
 import '../../../domain/entities/auth_dto.dart';
-import '../../model/signup_response_model.dart';
 
 class AuthRemoteDataSource {
   final ApiService apiService = ApiService(
@@ -37,22 +37,20 @@ class AuthRemoteDataSource {
 
   Future<void> signup(SignupDto signupDto) async {
     try {
-      await apiService.post('/register', data: signupDto.toJson());
+      await apiService.post('/signup', data: signupDto.toJson());
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<AuthResponseModel> verifyOtp(String otp, SignupDto signupDto) async {
+  Future<User> verifyAccount(String otp, String email) async {
     try {
       final response = await apiService.post(
-        '/verify-otp-and-register',
-        data: {'otp': otp, 'email': signupDto.email},
+        '/verify-account',
+        data: {'otp': otp, 'email': email, ...(await _fetchDeviceInfo())},
       );
 
-      final authModel = AuthResponseModel.fromJson(response['data']);
-
-      return authModel;
+      return User.fromJson(response['data']);
     } catch (e) {
       rethrow;
     }
@@ -66,16 +64,14 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<AuthResponseModel> login(LoginDto loginDto) async {
+  Future<User> login(LoginDto loginDto) async {
     try {
-      final response = await apiService.post('/login', data: {
-        ...loginDto.toJson(),
-        ...(await _fetchDeviceInfo())
-      });
+      final response = await apiService.post(
+        '/login',
+        data: {...loginDto.toJson(), ...(await _fetchDeviceInfo())},
+      );
 
-      final authModel = AuthResponseModel.fromJson(response['data']);
-
-      return authModel;
+      return User.fromJson(response['data']);
     } catch (e) {
       rethrow;
     }
@@ -89,21 +85,35 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<AuthResponseModel> changePassword({
+  Future<void> changePassword({
     required String oldPassword,
     required String newPassword,
   }) async {
     try {
-      final response =
-          await ApiService(
-            baseUrl: '${AppConstants.baseUrl}/auth',
-            unAuthorized: false,
-          ).patch(
-            '/change-password',
-            data: {'oldPassword': oldPassword, 'newPassword': newPassword},
-          );
+      await ApiService(
+        baseUrl: '${AppConstants.baseUrl}/auth',
+        unAuthorized: false,
+      ).patch(
+        '/change-password',
+        data: {'oldPassword': oldPassword, 'newPassword': newPassword},
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-      return AuthResponseModel.fromJson(response['data']);
+  Future<List<String>> suggestUserNames({required String email}) async {
+    try {
+      final response = await apiService.get(
+        '/suggest-usernames',
+        queryParams: {'email': email},
+      );
+
+      return List<String>.from(
+        response['data'].map((e) {
+          return e as String;
+        }),
+      );
     } catch (e) {
       rethrow;
     }

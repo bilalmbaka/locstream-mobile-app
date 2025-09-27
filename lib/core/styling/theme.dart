@@ -87,7 +87,7 @@ class AppTheme {
           Set<WidgetState> state,
         ) {
           if (state.contains(WidgetState.disabled)) {
-            return AppColors.ladingPageGradientGreen.withOpacity(.5);
+            return AppColors.inputBorder;
           }
 
           return AppColors.ladingPageGradientGreen;

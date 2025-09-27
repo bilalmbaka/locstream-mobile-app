@@ -48,8 +48,10 @@ class _OtpFieldState extends State<OtpField> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _beginTimer();
 
-      _textControllers =
-          List.generate(widget.otpLength, (index) => TextEditingController());
+      _textControllers = List.generate(
+        widget.otpLength,
+        (index) => TextEditingController(),
+      );
       _focusNodes = List.generate(widget.otpLength, (index) => FocusNode());
       setState(() {});
     });
@@ -72,54 +74,69 @@ class _OtpFieldState extends State<OtpField> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (_focusNodes.isNotEmpty && _textControllers.isNotEmpty)
           SizedBox(
             height: 50,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: FocusScope(
-                child: Row(
-                  children: List.generate(widget.otpLength, (index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 10.0),
-                      child: AppInputForm(
-                        width: 43,
-                        height: 50,
-                        keyboardType: TextInputType.number,
-                        showDefaultMaxLengthWidget: false,
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
+            width: 280,
+            child: LayoutBuilder(
+              builder: (context, constraints) => SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: constraints.maxWidth,
+                  ),
+                  child: FocusScope(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(widget.otpLength, (index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: AppInputForm(
+                            width: 50,
+                            height: 50,
+                            keyboardType: TextInputType.number,
+                            showDefaultMaxLengthWidget: false,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
                                 color: widget.incorrectOtp
                                     ? AppColors.redMain
-                                    : AppColors.stroke)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
+                                    : AppColors.stroke,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
                                 color: widget.incorrectOtp
                                     ? AppColors.redMain
-                                    : AppColors.stroke)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
+                                    : AppColors.stroke,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
                                 color: widget.incorrectOtp
                                     ? AppColors.redMain
-                                    : AppColors.stroke)),
-                        controller: _textControllers[index],
-                        textAlign: TextAlign.center,
-                        maxLength: 1,
-                        onChanged: (String? str) {
-                          _changeFocus(
-                            movingForward: str != null && str.isNotEmpty,
-                            currentIndex: index,
-                          );
-                          setState(() {});
-                        },
-                      ),
-                    );
-                  }),
+                                    : AppColors.stroke,
+                              ),
+                            ),
+                            controller: _textControllers[index],
+                            textAlign: TextAlign.center,
+                            maxLength: 1,
+                            onChanged: (String? str) {
+                              _changeFocus(
+                                movingForward: str != null && str.isNotEmpty,
+                                currentIndex: index,
+                              );
+                              setState(() {});
+                            },
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -128,11 +145,13 @@ class _OtpFieldState extends State<OtpField> {
         PlainButton(
           text: AppStrings.confirm,
           isLoading: widget.isLoading,
-          onTap: _textControllers.map((e) => e.text.trim()).join().length ==
+          onTap:
+              _textControllers.map((e) => e.text.trim()).join().length ==
                   widget.otpLength
               ? () {
                   widget.onOtpFilled(
-                      _textControllers.map((e) => e.text.trim()).join());
+                    _textControllers.map((e) => e.text.trim()).join(),
+                  );
                 }
               : null,
         ),
@@ -155,14 +174,14 @@ class _OtpFieldState extends State<OtpField> {
                     ? "00:${"${_maxDuration - (_resendOtpTimer?.tick ?? 0)}".padLeft(2, "0")}"
                     : AppStrings.resend,
                 textStyle: AppTextStyle(
-                        context: context,
-                        color: AppColors.complimentary,
-                        fontSize: 14)
-                    .fw900(),
+                  context: context,
+                  color: AppColors.complimentary,
+                  fontSize: 14,
+                ).fw900(),
               ),
-            )
+            ),
           ],
-        )
+        ),
       ],
     );
   }

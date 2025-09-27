@@ -14,16 +14,29 @@ class LoadingDialog extends StatelessWidget {
     required this.child,
     required this.state,
     required this.dismissOverlay,
+    this.image,
   });
 
   final Widget child;
   final BaseState state;
   final VoidCallback dismissOverlay;
+  final String? image;
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: state.isLoading == false,
+      canPop: state.isInitial,
+      onPopInvokedWithResult: (canPop, result) {
+        // print("can pop ${canPop}");
+        // print("current state is ${state.status}");
+
+        if (canPop == false) {
+          if (state.isError || state.isSuccess) {
+            dismissOverlay();
+            return;
+          }
+        }
+      },
       child: Stack(
         children: [
           child,
@@ -65,23 +78,18 @@ class LoadingDialog extends StatelessWidget {
         if (state.isSuccess) {
           return Image.asset(Images.verified, width: 100, height: 100);
         } else if (state.isError) {
+          String image = Images.dataGif;
+
+          if (state.status == Status.noNetwork) {
+            image = Images.noInternet;
+          }
+
           return Column(
             children: [
-              Image.asset(Images.dataGif, width: 100, height: 100),
+              Image.asset(this.image ?? image, width: 100, height: 100),
               AppConstants.mediumYSpace,
               AppTextField(
                 text: state.errorMessage ?? AppStrings.somethingWentWrong,
-                textStyle: AppTextStyle(context: context).fw600(),
-              ),
-            ],
-          );
-        } else if (state.status == Status.noNetwork) {
-          return Column(
-            children: [
-              Image.asset(Images.noInternet, width: 100, height: 100),
-              AppConstants.mediumYSpace,
-              AppTextField(
-                text: "No internet connection",
                 textStyle: AppTextStyle(context: context).fw600(),
               ),
             ],

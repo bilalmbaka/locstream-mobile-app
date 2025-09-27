@@ -17,10 +17,10 @@ class ApiExceptionHandler {
 
       switch (e.type) {
         case DioExceptionType.connectionTimeout ||
-              DioExceptionType.sendTimeout ||
-              DioExceptionType.receiveTimeout:
-          message = AppStrings.connectionTimeout;
-          break;
+            DioExceptionType.sendTimeout ||
+            DioExceptionType.connectionError ||
+            DioExceptionType.receiveTimeout:
+          return NoNetworkException(exception: e);
         case DioExceptionType.unknown:
           message = AppStrings.somethingWentWrong;
           break;
@@ -37,7 +37,7 @@ class ApiExceptionHandler {
     }
 
     if (e is TimeoutException || e is SocketException) {
-      message = AppStrings.connectionTimeout;
+      return NoNetworkException(exception: e);
     }
 
     return ApiException(message: message, exception: e, statusCode: statusCode);

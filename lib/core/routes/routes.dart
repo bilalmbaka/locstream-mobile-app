@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:locstream/views/screens/authentication/set_username.dart';
 import 'package:locstream/views/screens/onboarding/splash_screen.dart';
 
 import '../../views/screens/home.dart';
@@ -19,6 +20,13 @@ final publicRoutes = <GoRoute>[
   ...authRoutes,
 ];
 final privateRoutes = <GoRoute>[
+  GoRoute(
+    path: SetUserNameScreen.path,
+    name: SetUserNameScreen.routeName,
+    builder: (context, routeState) {
+      return SetUserNameScreen();
+    },
+  ),
   GoRoute(
     path: Home.path,
     name: Home.routeName,

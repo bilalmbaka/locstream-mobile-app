@@ -1,5 +1,4 @@
 import '../../data/model/user_model.dart';
-import '../../data/repository/authentication_repository.dart';
 import '../../data/repository/profile_repository.dart';
 import '../entities/profile_dto.dart';
 
@@ -37,5 +36,9 @@ class ProfileUseCase {
       searchString: searchString,
       startAt: startAt,
     );
+  }
+
+  Future<bool> checkUserNameAvailability({required String userName}) async {
+    return await profileRepo.checkUserNameAvailability(userName);
   }
 }

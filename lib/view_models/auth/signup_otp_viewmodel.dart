@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:locstream/data/model/user_model.dart';
 
 import '../../core/constants/strings.dart';
 import '../../core/error_handlers/exception_handler.dart';
@@ -7,29 +8,23 @@ import '../../data/model/signup_response_model.dart';
 import '../../domain/entities/auth_dto.dart';
 import '../../domain/use_case/auth_usecase.dart';
 
-typedef SignupOtpState = BaseState<AuthResponseModel>;
+typedef SignupOtpState = BaseState<User>;
 
-class SignupOtpViewmodel extends Notifier<SignupOtpState> {
+class SignupOtpViewModel extends Notifier<SignupOtpState> {
   final AuthUseCase authUseCase;
 
-  SignupOtpViewmodel({required this.authUseCase});
+  SignupOtpViewModel({required this.authUseCase});
 
   @override
   SignupOtpState build() {
     return BaseState.initial();
   }
 
-  SignupDto? signupDto;
-
-  Future<void> verifyOtp(String otp) async {
+  Future<void> verifyOtp(String otp,String email) async {
     try {
       state = BaseState.loading();
 
-      if (signupDto == null) {
-        throw FormatException();
-      }
-
-      final response = await authUseCase.verifyOtp(otp, signupDto!);
+      final response = await authUseCase.verifyAccount(otp,email);
 
       state = BaseState.success(response);
     } catch (e) {
