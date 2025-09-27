@@ -21,6 +21,11 @@ class EditProfileViewmodel extends Notifier<EditProfileState> {
   Future<void> editProfile(ProfileDto dto) async {
     try {
       state = BaseState.loading();
+
+      // await Future.delayed(Duration(seconds: 5), () {
+      //   throw UnimplementedError();
+      // });
+
       final profile = await profileUseCase.updateProfile(dto);
       state = BaseState.success(profile);
     } catch (e) {

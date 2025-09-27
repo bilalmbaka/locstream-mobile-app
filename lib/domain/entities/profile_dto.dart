@@ -25,21 +25,10 @@ class ProfileDto {
 
   Future<FormData> toFormData() async {
     return FormData.fromMap({
-      if (firstName != null && firstName!.trim() != "")
-        "firstName": firstName!.trim(),
-      if (lastName != null && lastName!.trim() != "")
-        "lastName": lastName!.trim(),
-      if (phoneNumber != null && phoneNumber!.trim() != "")
-        "phone": phoneNumber!.trim(),
-      if (plusCode != null && plusCode!.trim() != "")
-        "plusCode": plusCode!.trim(),
-      if (country != null && country!.trim() != "") "country": country!.trim(),
-      if (profilePicture != null && profilePicture!.trim() != "")
-        "profilePic": await MultipartFile.fromFile(profilePicture!),
-      if (userName != null && userName!.trim() != "")
-        "userName": userName!.trim(),
-      if (countryFlag != null && countryFlag!.trim() != "")
-        "countryFlag": countryFlag!.trim(),
+      if (profilePicture != null && profilePicture!.trim() != '')
+        'profilePic': await MultipartFile.fromFile(profilePicture!),
+      if (userName != null && userName!.trim() != '')
+        'userName': userName!.trim().toLowerCase(),
     });
 
     //TODO add pushNotificationToken

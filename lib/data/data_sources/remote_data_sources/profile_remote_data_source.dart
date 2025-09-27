@@ -22,7 +22,10 @@ class ProfileRemoteDataSource {
     try {
       final formData = await dto.toFormData();
 
-      final response = await apiService.patch('/profile', data: formData);
+      final response = await apiService.patch(
+        '/update-profile',
+        data: formData,
+      );
 
       return User.fromJson(response['data']);
     } catch (e) {
