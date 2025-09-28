@@ -21,8 +21,8 @@ import 'reset_password_screen.dart';
 import 'signup_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
-  static const path = "/$routeName";
-  static const routeName = "login";
+  static const path = '/$routeName';
+  static const routeName = 'login';
 
   const LoginScreen({super.key});
 
@@ -154,10 +154,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppInputForm(
-          title: AppStrings.emailAddress,
+          title: AppStrings.emailAddressOrUserName,
           controller: _emailAddressTextController,
-          hint: AppStrings.email,
-          validator: AppTextValidators.isEmail,
+          hint: AppStrings.emailOrUserNameHint,
+          validator: AppTextValidators.isEmpty,
         ),
         AppConstants.mediumYSpace,
         AppInputForm(
@@ -187,13 +187,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             password: _passwordTextController.text,
           ),
         );
-
   }
 
   void _loginListener(LoginState? previous, LoginState next) {
     if (next.isSuccess) {
       ref.read(profileViewModel.notifier).profile = next.data!;
-
 
       NavigationService.jumpToScreen(
         context: context,
@@ -201,5 +199,4 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       );
     }
   }
-
 }

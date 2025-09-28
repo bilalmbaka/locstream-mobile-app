@@ -3,8 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:locstream/core/constants/images.dart';
+import 'package:locstream/core/services/navigation_service.dart';
 import 'package:locstream/core/styling/colors.dart';
+import 'package:locstream/domain/entities/profile_dto.dart';
 import 'package:locstream/view_models.dart';
+import 'package:locstream/views/screens/home.dart';
+import 'package:locstream/views/widgets/loading_dialog.dart';
 import 'package:locstream/views/widgets/media/image_view.dart';
 
 import '../../../core/constants/constants.dart';
@@ -44,46 +48,66 @@ class _SetUserNameScreenState extends ConsumerState<SetUserNameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final editProfileState = ref.watch(editProfileViewModel);
+
+    ref.listen(editProfileViewModel, (previous, next) {
+      if (next.isSuccess) {
+        ref.read(profileViewModel.notifier).profile = next.data!;
+        NavigationService.pushToScreen(
+          context: context,
+          routeName: Home.routeName,
+        );
+      }
+    });
+
     return Scaffold(
       appBar: AppAppBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButtonAnimator: null,
-      floatingActionButton: Consumer(
-        builder: (context, ref, child) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Consumer(
-            builder: (context, ref, child) {
-              return PlainButton(
-                text: AppStrings.continueText,
-                onTap: ref.watch(checkUserNameAvailabilityViewModel).isSuccess
-                    ? () {
-                        AppHelpers.dismissKeyboard(context);
+      floatingActionButton: (editProfileState.isLoading)
+          ? null
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Consumer(
+                builder: (context, ref, child) {
+                  return PlainButton(
+                    text: AppStrings.continueText,
+                    onTap:
+                        ref.watch(checkUserNameAvailabilityViewModel).isSuccess
+                        ? () {
+                            AppHelpers.dismissKeyboard(context);
 
-                        if (!_formKey.currentState!.validate()) {
-                          return;
-                        }
+                            if (!_formKey.currentState!.validate()) {
+                              return;
+                            }
 
-                        if (ref
-                                .read(checkUserNameAvailabilityViewModel)
-                                .isSuccess ==
-                            false) {
-                          return;
-                        }
+                            if (ref
+                                    .read(checkUserNameAvailabilityViewModel)
+                                    .isSuccess ==
+                                false) {
+                              return;
+                            }
 
-                        // NavigationService.pushToScreen(
-                        //   context: context,
-                        //   routeName: Home.routeName,
-                        // );
-                      }
-                    : null,
-              );
-            },
-          ),
+                            ref
+                                .read(editProfileViewModel.notifier)
+                                .editProfile(
+                                  ProfileDto(
+                                    userName: _userNameTextController.text,
+                                  ),
+                                );
+                          }
+                        : null,
+                  );
+                },
+              ),
+            ),
+      body: LoadingDialog(
+        state: editProfileState,
+        dismissOverlay: () => ref.invalidate(editProfileViewModel),
+        child: AppHelpers.wrapChildWithLayoutBuilder(
+          padding: AppHelpers.defaultPadding(bottom: 300),
+          child: SizedBox(width: double.infinity, child: _body()),
         ),
-      ),
-      body: AppHelpers.wrapChildWithLayoutBuilder(
-        padding: AppHelpers.defaultPadding(bottom: 300),
-        child: SizedBox(width: double.infinity, child: _body()),
       ),
     );
   }
@@ -227,9 +251,8 @@ class _SetUserNameScreenState extends ConsumerState<SetUserNameScreen> {
                               _userNameTextController.text = suggestion;
                               ref
                                   .read(
-                                checkUserNameAvailabilityViewModel
-                                    .notifier,
-                              )
+                                    checkUserNameAvailabilityViewModel.notifier,
+                                  )
                                   .check(userName: suggestion);
                             },
                             behavior: HitTestBehavior.opaque,

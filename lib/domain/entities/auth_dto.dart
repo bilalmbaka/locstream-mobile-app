@@ -5,7 +5,12 @@ class LoginDto {
   LoginDto({required this.email, required this.password});
 
   Map<String, dynamic> toJson() {
-    return {"email": email.trim(), "password": password, 'role': 'user'};
+    return {
+      'email': email.trim().toLowerCase(),
+      'userName': email.trim().toLowerCase(),
+      'password': password,
+      'role': 'user',
+    };
   }
 }
 
@@ -39,6 +44,6 @@ class ResetPasswordDto {
   });
 
   Map<String, dynamic> toJson() {
-    return {'email': email, 'otp': otp, 'newPassword': password};
+    return {'email': email, 'otp': otp, 'password': password};
   }
 }

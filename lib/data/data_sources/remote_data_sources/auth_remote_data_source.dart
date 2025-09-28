@@ -79,7 +79,7 @@ class AuthRemoteDataSource {
 
   Future<void> resetPassword(ResetPasswordDto resetPasswordDto) async {
     try {
-      await apiService.post('/reset-password', data: resetPasswordDto.toJson());
+      await apiService.patch('/reset-password', data: resetPasswordDto.toJson());
     } catch (e) {
       rethrow;
     }

@@ -7,7 +7,9 @@ class AppStrings {
 
   static const welcomeBack = 'Welcome back';
   static const emailAddress = 'Email address';
-  static const email = 'Email';
+  static const emailAddressOrUserName = 'Email address / Username';
+  static const email = 'jhondoe@email.com';
+  static const emailOrUserNameHint = 'jhondoe';
   static const enterPassword = 'Enter password';
   static const asterics = '********';
   static const forgotPassword = 'Forgot password?';
