@@ -1,4 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:locstream/core/constants/constants.dart';
+import 'package:locstream/core/utils/helpers/helpers.dart';
+import 'package:locstream/data/data_sources/remote_data_sources/wathcers_location_socket.dart';
 import 'package:locstream/data/model/user_model.dart';
 import 'package:locstream/domain/use_case/auth_usecase.dart';
 import 'package:locstream/domain/use_case/share_location_use_case.dart';
@@ -8,6 +11,7 @@ import '../../core/utils/base_state.dart';
 
 typedef WatchingState = BaseState<List<BaseState<User>>>;
 
+///People whose location user it monitoring
 class WatchingViewModel extends Notifier<WatchingState> {
   WatchingViewModel({required this.shareLocationUseCase});
 
@@ -15,12 +19,60 @@ class WatchingViewModel extends Notifier<WatchingState> {
 
   @override
   WatchingState build() {
+    shareLocationUseCase.watchingUsersStreamController().stream.listen(
+      (WatchingSocketEvent data) {
+        if (data.event == AppConstants.reconnectedEvent) {
+          state = WatchingState.success(state.data ?? <BaseState<User>>[]);
+        }
+
+        if (data.user != null) {
+          final users = state.data ?? <BaseState<User>>[];
+
+          final index = users.indexWhere(
+            (element) => element.data?.id == data.user?.id,
+          );
+
+          if (index == -1) {
+            state = WatchingState.success([
+              ...users,
+              BaseState.success(data.user!),
+            ]);
+          } else {
+            state = WatchingState.success([
+              ...users.sublist(0, index),
+              BaseState.success(data.user!),
+              ...users.sublist(index + 1),
+            ]);
+          }
+        }
+      },
+      onError: (error) {
+        if (error is WatchingSocketEvent) {
+          if (error.event == AppConstants.connectionErrorEvent) {
+            state = WatchingState.error('Connection error', data: state.data);
+          }
+          if (error.event == AppConstants.disconnectErrorEvent) {
+            state = WatchingState.error('Network error', data: state.data);
+          }
+        }
+      },
+    );
+
     return WatchingState.initial();
+  }
+
+  void reset() {
+    shareLocationUseCase.disconnectWatchingSocket();
+    state = BaseState.initial();
+  }
+
+  void connect() {
+    shareLocationUseCase.connectWatchingSocket();
   }
 
   Future<void> fetch() async {
     try {
-      state = BaseState.loading();
+      state = BaseState.loading(data: state.data);
 
       final users = await shareLocationUseCase.fetchLocationSharers();
 
@@ -33,7 +85,7 @@ class WatchingViewModel extends Notifier<WatchingState> {
         stackTrace: s,
       );
 
-      state = WatchingState.error(errorMessage, e: e);
+      state = WatchingState.error(errorMessage, e: e, data: state.data);
     }
   }
 }

@@ -7,8 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:locstream/views/widgets/app_text_field.dart';
-import 'package:locstream/views/widgets/status_toast.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+
 
 import '../../../view_models.dart';
 import '../../../views/screens/authentication/login_screen.dart';
@@ -165,5 +167,17 @@ class AppHelpers {
         backgroundColor: backgroundColor,
       ),
     );
+  }
+
+  static void moveCameraToLocation(
+    MapController mapController,
+    double latitude,
+    double longitude, {
+    double? zoom,
+  }) {
+    final zoomValue = zoom ?? mapController.camera.zoom;
+    final position = LatLng(latitude, longitude);
+
+    mapController.move(position, zoomValue);
   }
 }

@@ -1,14 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:locstream/core/services/location_service.dart';
 
 import 'package:locstream/core/utils/base_state.dart';
+import 'package:locstream/data/repository/maps_repositoty.dart';
 import 'package:locstream/data/repository/share_location_repository.dart';
+import 'package:locstream/domain/use_case/maps_usecase.dart';
 import 'package:locstream/domain/use_case/share_location_use_case.dart';
 import 'package:locstream/view_models/auth/login_viewmodel.dart';
 import 'package:locstream/view_models/auth/logout_viewmodel.dart';
 import 'package:locstream/view_models/auth/reset_password_viewmodel.dart';
 import 'package:locstream/view_models/auth/signup_otp_viewmodel.dart';
 import 'package:locstream/view_models/auth/signup_viewmodel.dart';
+import 'package:locstream/view_models/directions_viewmodel.dart';
+import 'package:locstream/view_models/location_viewmodel.dart';
 import 'package:locstream/view_models/notifications/push_notifications_viewmodel.dart';
 import 'package:locstream/view_models/profile/change_password_viewmodel.dart';
 import 'package:locstream/view_models/profile/check_username_availabilty.dart';
@@ -74,9 +79,10 @@ final changePasswordViewModel =
 
 final fetchingMoreUsersState = ValueNotifier<bool>(false);
 
-final findUsersViewModel = NotifierProvider.autoDispose<FindUsersViewmodel, FindUsersState>(
-  () => FindUsersViewmodel(profileUsecase: _profileUseCase),
-);
+final findUsersViewModel =
+    NotifierProvider.autoDispose<FindUsersViewmodel, FindUsersState>(
+      () => FindUsersViewmodel(profileUsecase: _profileUseCase),
+    );
 
 final pushNotificationsViewModel =
     NotifierProvider<PushNotificationViewModel, void>(
@@ -111,3 +117,17 @@ final watchersViewModel = NotifierProvider<WatchersViewModel, WatchersState>(
 final watchingViewModel = NotifierProvider<WatchingViewModel, WatchingState>(
   () => WatchingViewModel(shareLocationUseCase: _shareLocationUseCase),
 );
+
+final locationViewModel = NotifierProvider<LocationViewModel, LocationState>(
+  () => LocationViewModel(
+    profileUseCase: _profileUseCase,
+    locationService: LocationService(),
+  ),
+);
+
+final directionsViewModel =
+    NotifierProvider<DirectionsViewmodel, DirectionsState>(
+      () => DirectionsViewmodel(
+        mapsUseCase: MapsUseCase(mapsRepository: MapsRepository()),
+      ),
+    );

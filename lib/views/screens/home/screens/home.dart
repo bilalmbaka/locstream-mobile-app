@@ -1,24 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:locstream/core/styling/colors.dart';
+import 'package:locstream/core/utils/helpers/helpers.dart';
+import 'package:locstream/view_models.dart';
 import 'package:locstream/views/screens/home/widgets/drawer.dart';
+import 'package:locstream/views/screens/home/widgets/map.dart';
 
-class Home extends StatefulWidget {
+class Home extends ConsumerStatefulWidget {
   static const routeName = 'home';
   static const path = '/$routeName';
 
   const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  ConsumerState<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends ConsumerState<Home> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(watchingViewModel.notifier).connect();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.listen(watchingViewModel, (previous, next) {
+      if (next.isError) {
+        if (next.errorMessage != null) {
+          AppHelpers.showToast(context, next.errorMessage!);
+        }
+      }
+    });
+
     return Scaffold(
       endDrawer: HomeEndDrawer(),
       body: Stack(
         children: [
+          MapScreen(),
           Positioned(
             top: 40,
             right: 20,

@@ -22,8 +22,10 @@ class LogoutViewModel extends Notifier<LogoutState> {
 
   Future<void> logout() async {
     try {
+      ref.read(watchingViewModel.notifier).reset();
+
       ref.read(profileViewModel.notifier).reset();
-      ref.invalidate(watchingViewModel);
+      ref.read(watchingViewModel);
       ref.invalidate(watchersViewModel);
       ref.invalidate(findUsersViewModel);
       ref.invalidate(suggestUserNameViewModel);

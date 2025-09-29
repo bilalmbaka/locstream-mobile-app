@@ -189,4 +189,5 @@ class AppStrings {
   static const settings = 'settings';
 
   static const deleteAccount = 'Delete account';
+  static const mapBox = "MapBox";
 }
