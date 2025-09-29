@@ -75,6 +75,7 @@ class AppTheme {
       backgroundColor: AppColors.transparent,
       elevation: 0,
       foregroundColor: AppColors.transparent,
+      scrolledUnderElevation: 0,
     ),
     scaffoldBackgroundColor: AppColors.primaryColor,
     progressIndicatorTheme: ProgressIndicatorThemeData(color: AppColors.white),
@@ -128,7 +129,7 @@ class AppTheme {
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: AppColors.text3),
+        borderSide: BorderSide(color: AppColors.inputBorder),
       ),
     ),
   );

@@ -11,6 +11,8 @@ import 'package:locstream/views/screens/authentication/login_screen.dart';
 import 'package:locstream/views/screens/home/widgets/drawer_tile.dart';
 import 'package:locstream/views/screens/home/widgets/watchers.dart';
 import 'package:locstream/views/screens/home/widgets/watching.dart';
+import 'package:locstream/views/screens/profile/edit_profile_screen.dart';
+import 'package:locstream/views/screens/settings/settings_home.dart';
 import 'package:locstream/views/widgets/action_tile.dart';
 import 'package:locstream/views/widgets/app_text_field.dart';
 import 'package:locstream/views/widgets/profile_picture.dart';
@@ -25,42 +27,67 @@ class HomeEndDrawer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return NavigationDrawer(
       header: DrawerHeader(
-        child: Column(
+        child: Stack(
           children: [
-            Consumer(
-              builder: (context, ref, child) {
-                final userProfile = ref.read(profileViewModel).data;
+            Column(
+              children: [
+                Consumer(
+                  builder: (context, ref, child) {
+                    final userProfile = ref.read(profileViewModel).data;
 
-                return ProfilePicture(
-                  initials: userProfile!.userName![0],
-                  profilePicture: userProfile.profilePicture?.url,
-                  initialsFontSize: 50,
-                );
-              },
-            ),
-            AppConstants.mediumYSpace,
-            GestureDetector(
-              onTap: () {
-                //TODO Edit
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
+                    return ProfilePicture(
+                      initials: userProfile!.userName![0],
+                      profilePicture: userProfile.profilePicture?.url,
+                      initialsFontSize: 50,
+                    );
+                  },
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 10,
-                  children: [
-                    AppTextField(
-                      text: AppStrings.edit,
-                      textStyle: AppTextStyle(
-                        context: context,
-                        fontSize: 13,
-                      ).fw500(),
+                AppConstants.mediumYSpace,
+                GestureDetector(
+                  onTap: () {
+                    NavigationService.pop(context: context);
+
+                    NavigationService.pushToScreen(
+                      context: context,
+                      routeName: EditProfileScreen.routeName,
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    Icon(Icons.edit_outlined, size: 12),
-                  ],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 10,
+                      children: [
+                        AppTextField(
+                          text: AppStrings.edit,
+                          textStyle: AppTextStyle(
+                            context: context,
+                            fontSize: 13,
+                          ).fw500(),
+                        ),
+                        Icon(Icons.edit_outlined, size: 12),
+                      ],
+                    ),
+                  ),
                 ),
+              ],
+            ),
+
+            Positioned(
+              top: -8,
+              right: 0,
+              child: IconButton(
+                onPressed: () {
+                  NavigationService.pop(context: context);
+
+                  NavigationService.pushToScreen(
+                    context: context,
+                    routeName: SettingsHome.routeName,
+                  );
+                },
+                icon: Icon(Icons.settings,size: 20,),
               ),
             ),
           ],

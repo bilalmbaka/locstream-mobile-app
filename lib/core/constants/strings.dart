@@ -182,8 +182,11 @@ class AppStrings {
   static const add = 'Add';
   static const addWatcher = 'Add watcher';
   static const addWatcherWarning = 'will be able to see you location';
-  static const watchers = "Watchers";
-  static const peopleWhoCanSeeWhereYouAre = "People who can see where you are";
-  static const watching = "Watching";
-  static const watchingInfo = "People who allow you to see where they are";
+  static const watchers = 'Watchers';
+  static const peopleWhoCanSeeWhereYouAre = 'People who can see where you are';
+  static const watching = 'Watching';
+  static const watchingInfo = 'People who allow you to see where they are';
+  static const settings = 'settings';
+
+  static const deleteAccount = 'Delete account';
 }
