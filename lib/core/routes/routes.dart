@@ -1,8 +1,11 @@
 import 'package:go_router/go_router.dart';
+import 'package:locstream/views/screens/add_new_watcher.dart';
 import 'package:locstream/views/screens/authentication/set_username.dart';
 import 'package:locstream/views/screens/onboarding/splash_screen.dart';
+import 'package:locstream/views/screens/profile/edit_profile_screen.dart';
+import 'package:locstream/views/screens/settings/settings_home.dart';
 
-import '../../views/screens/home.dart';
+import '../../views/screens/home/screens/home.dart';
 import '../../views/screens/required_permission_screen.dart';
 import '../constants/constants.dart';
 import 'auth_routes.dart';
@@ -33,7 +36,29 @@ final privateRoutes = <GoRoute>[
     builder: (context, routeState) {
       return const Home();
     },
-    routes: [],
+    routes: [
+      GoRoute(
+        path: AddNewWatcher.path,
+        name: AddNewWatcher.routeName,
+        builder: (context, routeState) {
+          return AddNewWatcher();
+        },
+      ),
+      GoRoute(
+        path: EditProfileScreen.path,
+        name: EditProfileScreen.routeName,
+        builder: (context, routeState) {
+          return EditProfileScreen();
+        },
+      ),
+      GoRoute(
+        path: SettingsHome.path,
+        name: SettingsHome.routeName,
+        builder: (context, routeState) {
+          return SettingsHome();
+        },
+      ),
+    ],
   ),
 ];
 

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:locstream/views/widgets/app_text_field.dart';
+import 'package:locstream/views/widgets/status_toast.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../view_models.dart';
@@ -93,10 +95,10 @@ class AppHelpers {
     return List<File>.from(media.xFiles.map((e) => File(e.path)));
   }
 
-  static void forceLogout() {
+  static void forceLogout({required String errorMessage}) {
     final context = AppConstants.rootNavigatorKey.currentContext!;
 
-    AppHelpers.showToast(context, "Refresh token expired");
+    AppHelpers.showToast(context, errorMessage);
 
     NavigationService.jumpToScreen(
       context: context,
@@ -150,5 +152,18 @@ class AppHelpers {
   }) async {
     await Clipboard.setData(ClipboardData(text: text));
     AppHelpers.showToast(context, "Copied to clipboard");
+  }
+
+  static showSnackBar({
+    required BuildContext context,
+    required String message,
+    Color? backgroundColor,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: AppTextField(text: message),
+        backgroundColor: backgroundColor,
+      ),
+    );
   }
 }

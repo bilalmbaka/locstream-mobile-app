@@ -5,8 +5,8 @@ class User {
   final String id;
   final String email;
   final String? userName;
-  final bool emailVerified;
-  final bool disabled;
+  final bool? emailVerified;
+  final bool? disabled;
   final String?
   disabledReason; // This was declared but not used in constructor or methods, added to them.
   final String?
@@ -24,8 +24,8 @@ class User {
     required this.id,
     required this.email,
     this.userName,
-    required this.emailVerified,
-    required this.disabled,
+    this.emailVerified = false,
+    this.disabled = true,
     this.disabledReason,
     this.accessToken,
     this.refreshToken,
@@ -42,8 +42,8 @@ class User {
       id: json['id'] as String,
       email: json['email'] as String,
       userName: json['userName'] as String?,
-      emailVerified: json['emailVerified'] as bool,
-      disabled: json['disabled'] as bool,
+      emailVerified: json['emailVerified'],
+      disabled: json['disabled'],
       disabledReason: json['disabledReason'] as String?,
       accessToken: json['accessToken'] as String?,
       refreshToken: json['refreshToken'] as String?,

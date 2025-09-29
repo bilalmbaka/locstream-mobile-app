@@ -35,7 +35,7 @@ class AppStrings {
   static const enterEmailToResetPassword =
       'Enter your registered email address to reset your password.';
 
-  static const createUserName = "Create username";
+  static const createUserName = 'Create username';
   static const setUserName =
       'Enter your unique username, must be at least 5 characters long, contain letters and numbers only.';
 
@@ -82,6 +82,7 @@ class AppStrings {
 
   static const confirmDetails = 'Confirm Details';
 
+  static const edit = 'Edit';
   static const editProfile = 'Edit profile';
   static const changePassword = 'Change password';
   static const contactSupport = 'Contact support';
@@ -174,4 +175,18 @@ class AppStrings {
   static const locationPermission = 'Location permission';
   static const notificationPermission = 'Notification permission';
   static const grant = 'Grant';
+
+  static const removeWatcher = 'Remove Watcher';
+  static const willStopSeeingYourLocation = 'will stop seeing you location';
+  static const remove = 'Remove';
+  static const add = 'Add';
+  static const addWatcher = 'Add watcher';
+  static const addWatcherWarning = 'will be able to see you location';
+  static const watchers = 'Watchers';
+  static const peopleWhoCanSeeWhereYouAre = 'People who can see where you are';
+  static const watching = 'Watching';
+  static const watchingInfo = 'People who allow you to see where they are';
+  static const settings = 'settings';
+
+  static const deleteAccount = 'Delete account';
 }

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:locstream/core/constants/constants.dart';
 import 'package:locstream/data/model/user_model.dart';
 
 import '../../domain/entities/auth_dto.dart';
@@ -57,5 +60,19 @@ class AuthRepository {
 
   Future<List<String>> suggestUserNames({required String email}) async {
     return await _remoteDataSource.suggestUserNames(email: email);
+  }
+
+  Future<void> logout({required String accessToken}) async {
+    await _remoteDataSource.logout(accessToken: accessToken);
+  }
+
+  Future<String?> getAccessToken() async {
+    final tokens = await _localDataSource.getAuthToken();
+
+    if (tokens == null) return null;
+
+    final decodedTokens = jsonDecode(tokens);
+
+    return decodedTokens[AppConstants.authTokenKey];
   }
 }

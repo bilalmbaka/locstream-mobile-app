@@ -58,34 +58,38 @@ class ApiService {
 
             if (refreshToken == null) throw IrrecoverableTokenException();
 
-            final refreshTokenResponse = (await Dio().post(
-                    "${AppConstants.baseUrl}/auth/refresh",
-                    data: {"refreshToken": refreshToken}))
+            final refreshTokenResponse = (await Dio().patch(
+                    '${AppConstants.baseUrl}/auth/refresh-token',
+                    data: {'refreshToken': refreshToken}))
                 .data;
 
             final newAccessToken =
-                refreshTokenResponse["data"]["accessToken"] as String;
+                refreshTokenResponse['data']['accessToken'] as String;
             final newRefreshToken =
-                refreshTokenResponse["data"]["refreshToken"] as String;
+                refreshTokenResponse['data']['refreshToken'] as String;
 
             await AuthLocalDataSource().saveAuthToken(newAccessToken);
             await AuthLocalDataSource().saveRefreshToken(newRefreshToken);
 
             return handler.next(options.copyWith(headers: {
               ...options.headers,
-              "Authorization": "Bearer $newAccessToken"
+              'Authorization': 'Bearer $newAccessToken'
             }));
           } else {
             return handler.next(options.copyWith(headers: {
               ...options.headers,
-              "Authorization": "Bearer $accessToken"
+              'Authorization': 'Bearer $accessToken'
             }));
           }
         } catch (e) {
+          print('Error refreshing token $e ');
+
           if (e is IrrecoverableTokenException ||
               (e.runtimeType == DioException &&
-                  (e as DioException).response?.statusCode == 400)) {
-            AppHelpers.forceLogout();
+                  (e as DioException).response?.statusCode == 417)) {
+            AppHelpers.forceLogout(
+              errorMessage: 'Could not process token'
+            );
           }
 
           return handler.reject(DioException(
@@ -94,8 +98,8 @@ class ApiService {
                   requestOptions: options,
                   statusCode: 403,
                   data: {
-                    "success": false,
-                    "message": "Error decoding authorization token"
+                    'success': false,
+                    'message': 'Error decoding authorization token'
                   })));
         }
       }, onError: (exception, handler) {
@@ -105,7 +109,7 @@ class ApiService {
 
         if (response.statusCode == 423) {
           AppHelpers.overLayDisabledBanner(
-              message: response.data["message"] ?? AppStrings.disabled);
+              message: response.data['message'] ?? AppStrings.disabled);
         }
 
         return handler.reject(exception);
@@ -161,17 +165,17 @@ class ApiService {
   Future<Map<String, dynamic>> _handleResponse(Response response) async {
     final data = response.data;
     if ((data is Map<String, dynamic>) == false) {
-      return {"data": data};
+      return {'data': data};
     }
 
-    if (data["success"]) {
+    if (data['success']) {
       return data;
     } else {
       throw DioException(
           requestOptions: RequestOptions(path: response.requestOptions.path),
           response: response,
           type: DioExceptionType.badResponse,
-          error: data["message"]);
+          error: data['message']);
     }
   }
 }

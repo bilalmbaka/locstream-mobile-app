@@ -25,12 +25,12 @@ class NoResult extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        ImageView(
-          image: image ?? Images.sandClock,
-          width: imageWidth ?? 50,
-          height: imageHeight ?? 50,
-        ),
-        20.h,
+        // ImageView(
+        //   image: image ?? Images.sandClock,
+        //   width: imageWidth ?? 50,
+        //   height: imageHeight ?? 50,
+        // ),
+        // 20.h,
         AppTextField(
           text: message,
           textAlign: TextAlign.center,

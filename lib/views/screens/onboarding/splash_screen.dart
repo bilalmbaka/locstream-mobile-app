@@ -9,7 +9,7 @@ import 'package:locstream/data/data_sources/local_data_sources/profile_local_dat
 import 'package:locstream/view_models.dart';
 import 'package:locstream/views/screens/authentication/set_username.dart';
 import 'package:locstream/views/screens/authentication/signup_email_verification_screen.dart';
-import 'package:locstream/views/screens/home.dart';
+import 'package:locstream/views/screens/home/screens/home.dart';
 import 'package:locstream/views/screens/required_permission_screen.dart';
 
 import '../../../core/services/navigation_service.dart';

@@ -20,9 +20,9 @@ class FindUsersViewmodel extends Notifier<FindUsersState> {
 
   Future<void> search({
     String? searchString,
-    bool showLoading = false,
+    bool showLoading = true,
     bool fetchMore = false,
-    int startAt = 1,
+    int startAt = 0,
   }) async {
     try {
       if (showLoading) {

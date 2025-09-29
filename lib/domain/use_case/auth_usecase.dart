@@ -55,4 +55,12 @@ class AuthUseCase {
   Future<List<String>> suggestUserNames({required String email}) async {
     return await authRepo.suggestUserNames(email: email);
   }
+
+  Future<void> logout({required String accessToken}) async {
+    await authRepo.logout(accessToken: accessToken);
+  }
+
+  Future<String?> fetchAccessToken() async {
+    return await authRepo.getAccessToken();
+  }
 }
