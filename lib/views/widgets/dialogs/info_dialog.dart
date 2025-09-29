@@ -7,13 +7,20 @@ import '../app_text_field.dart';
 import '../media/image_view.dart';
 
 class InfoDialog extends StatelessWidget {
-  const InfoDialog(
-      {super.key, required this.information, this.title, this.actionButton,this.dismissible = true});
+  const InfoDialog({
+    super.key,
+    required this.information,
+    this.title,
+    this.actionButton,
+    this.dismissible = true,
+    this.coverImage,
+  });
 
   final String? title;
   final String information;
   final Widget? actionButton;
   final bool dismissible;
+  final Widget? coverImage;
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +32,16 @@ class InfoDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ImageView(
-              image: Images.info,
-              width: 40,
-              height: 40,
-            ),
+            coverImage ?? ImageView(image: Images.info, width: 40, height: 40),
             if (title != null)
               Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: AppTextField(
                   text: title!,
-                  textStyle: AppTextStyle(context: context, fontSize: 14).fw900(),
+                  textStyle: AppTextStyle(
+                    context: context,
+                    fontSize: 14,
+                  ).fw900(),
                 ),
               ),
             10.h,
@@ -45,10 +51,7 @@ class InfoDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             if (actionButton != null)
-              Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: actionButton!,
-              )
+              Padding(padding: EdgeInsets.only(top: 30), child: actionButton!),
           ],
         ),
       ),

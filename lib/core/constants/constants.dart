@@ -4,11 +4,11 @@ import '../utils/extensions/double_extensions.dart';
 
 class AppConstants {
   //Fontfamilies
-  static const nunitoFontFamily = "Nunito";
-  static const montserratFontFamily = "Montserrat";
+  static const nunitoFontFamily = 'Nunito';
+  static const montserratFontFamily = 'Montserrat';
 
-  static const appName = "Locstream";
-  static const appNameInitials = "LS";
+  static const appName = 'Locstream';
+  static const appNameInitials = 'LS';
 
   //Spacers
   static final smallYSpace = 8.0.h;
@@ -27,13 +27,13 @@ class AppConstants {
   static const baseUrl = String.fromEnvironment('baseUrl');
 
   //local storage keys
-  static const userKey = "userProfile";
-  static const authTokenKey = "authToken";
-  static const refreshTokenKey = "refreshToken";
+  static const userKey = 'userProfile';
+  static const authTokenKey = 'authToken';
+  static const refreshTokenKey = 'refreshToken';
 
   //file types
-  static const images = [".png", ".jpg"];
-  static const videos = [".mp4", ".mkv"];
+  static const images = ['.png', '.jpg'];
+  static const videos = ['.mp4', '.mkv'];
 
   static const int paginationJump = 20;
 }

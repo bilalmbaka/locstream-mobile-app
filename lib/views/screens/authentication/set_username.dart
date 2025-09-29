@@ -7,7 +7,7 @@ import 'package:locstream/core/services/navigation_service.dart';
 import 'package:locstream/core/styling/colors.dart';
 import 'package:locstream/domain/entities/profile_dto.dart';
 import 'package:locstream/view_models.dart';
-import 'package:locstream/views/screens/home.dart';
+import 'package:locstream/views/screens/home/screens/home.dart';
 import 'package:locstream/views/widgets/loading_dialog.dart';
 import 'package:locstream/views/widgets/media/image_view.dart';
 

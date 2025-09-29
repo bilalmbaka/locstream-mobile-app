@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:locstream/views/widgets/loading_indicator.dart';
 
 import '../../../core/utils/extensions/integer_extensions.dart';
 import '../../../core/utils/helpers/helpers.dart';
@@ -53,7 +54,7 @@ class StatusWrapper extends StatelessWidget {
             (loadingChild != null)
                 ? loadingChild!
                 : const Center(
-                    child: CircularProgressIndicator.adaptive(),
+                    child: AppLoadingIndicator(),
                   ),
           if (showErrorState && (status == Status.error)) ...[
             Icon(Icons.error),

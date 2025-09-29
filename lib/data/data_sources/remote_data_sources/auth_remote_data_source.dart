@@ -79,7 +79,10 @@ class AuthRemoteDataSource {
 
   Future<void> resetPassword(ResetPasswordDto resetPasswordDto) async {
     try {
-      await apiService.patch('/reset-password', data: resetPasswordDto.toJson());
+      await apiService.patch(
+        '/reset-password',
+        data: resetPasswordDto.toJson(),
+      );
     } catch (e) {
       rethrow;
     }
@@ -114,6 +117,18 @@ class AuthRemoteDataSource {
           return e as String;
         }),
       );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> logout({required String accessToken}) async {
+    try {
+      await ApiService(
+        baseUrl: '${AppConstants.baseUrl}/auth',
+        unAuthorized: false,
+        token: accessToken
+      ).post('/logout');
     } catch (e) {
       rethrow;
     }

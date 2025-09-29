@@ -2,7 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:locstream/core/utils/base_state.dart';
+import 'package:locstream/data/repository/share_location_repository.dart';
+import 'package:locstream/domain/use_case/share_location_use_case.dart';
 import 'package:locstream/view_models/auth/login_viewmodel.dart';
+import 'package:locstream/view_models/auth/logout_viewmodel.dart';
 import 'package:locstream/view_models/auth/reset_password_viewmodel.dart';
 import 'package:locstream/view_models/auth/signup_otp_viewmodel.dart';
 import 'package:locstream/view_models/auth/signup_viewmodel.dart';
@@ -13,6 +16,9 @@ import 'package:locstream/view_models/profile/edit_profile_viewmodel.dart';
 import 'package:locstream/view_models/profile/find_users_viewmodel.dart';
 import 'package:locstream/view_models/profile/profile_viewmodel.dart';
 import 'package:locstream/view_models/profile/suggest_username_viewmodel.dart';
+import 'package:locstream/view_models/watchers/add_new_watcher_viewmodel.dart';
+import 'package:locstream/view_models/watchers/watchers_viewmodel.dart';
+import 'package:locstream/view_models/watchers/watching_viewmodel.dart';
 
 import 'core/services/push_notification/push_notification_service.dart';
 import 'data/repository/authentication_repository.dart';
@@ -26,6 +32,10 @@ final _authUseCase = AuthUseCase(
 );
 
 final _profileUseCase = ProfileUseCase(profileRepo: ProfileRepository());
+
+final _shareLocationUseCase = ShareLocationUseCase(
+  shareLocationRepo: ShareLocationRepository(),
+);
 
 final signupViewModel = NotifierProvider<SignupViewModel, SignupState>(
   () => SignupViewModel(authUseCase: _authUseCase),
@@ -48,6 +58,10 @@ final loginViewModel = NotifierProvider<LoginViewModel, LoginState>(
   () => LoginViewModel(loginUseCase: _authUseCase),
 );
 
+final logoutViewModel = NotifierProvider<LogoutViewModel, LogoutState>(
+  () => LogoutViewModel(authUseCase: _authUseCase),
+);
+
 final resetPasswordViewModel =
     NotifierProvider<ResetPasswordViewmodel, ResetPasswordState>(
       () => ResetPasswordViewmodel(authUseCase: _authUseCase),
@@ -60,7 +74,7 @@ final changePasswordViewModel =
 
 final fetchingMoreUsersState = ValueNotifier<bool>(false);
 
-final findUsersViewModel = NotifierProvider<FindUsersViewmodel, FindUsersState>(
+final findUsersViewModel = NotifierProvider.autoDispose<FindUsersViewmodel, FindUsersState>(
   () => FindUsersViewmodel(profileUsecase: _profileUseCase),
 );
 
@@ -81,5 +95,19 @@ final suggestUserNameViewModel =
 
 final checkUserNameAvailabilityViewModel =
     NotifierProvider<CheckUserNameAvailability, UserNameAvailabilityState>(
-      () => CheckUserNameAvailability(profileUseCase:  _profileUseCase),
+      () => CheckUserNameAvailability(profileUseCase: _profileUseCase),
     );
+
+final addNewWatcherViewModel =
+    NotifierProvider<AddNewWatchersViewModel, AddNewWatcherState>(
+      () =>
+          AddNewWatchersViewModel(shareLocationUseCase: _shareLocationUseCase),
+    );
+
+final watchersViewModel = NotifierProvider<WatchersViewModel, WatchersState>(
+  () => WatchersViewModel(shareLocationUseCase: _shareLocationUseCase),
+);
+
+final watchingViewModel = NotifierProvider<WatchingViewModel, WatchingState>(
+  () => WatchingViewModel(shareLocationUseCase: _shareLocationUseCase),
+);

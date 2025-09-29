@@ -31,7 +31,7 @@ class BaseState<T> {
   }) {
     AppHelpers.printToLog(errorMessage.toString());
     return BaseState<T>(
-      status: e is NoNetworkException ? Status.noNetwork : Status.error ,
+      status: e is NoNetworkException ? Status.noNetwork : Status.error,
       errorMessage: errorMessage,
       data: data,
     );
@@ -50,4 +50,18 @@ class BaseState<T> {
       status == Status.noNetwork;
 
   bool get isNoNetwork => status == Status.noNetwork;
+
+  BaseState<T> copyWith({
+    Status? status,
+    String? errorMessage,
+    String? message,
+    T? data, // data parameter is of type T?
+  }) {
+    return BaseState<T>(
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
+      message: message ?? this.message,
+      data: data ?? this.data, // Uses the provided data or the existing data
+    );
+  }
 }

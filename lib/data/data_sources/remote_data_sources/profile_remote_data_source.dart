@@ -47,7 +47,7 @@ class ProfileRemoteDataSource {
       );
 
       return List<User>.from(
-        response['data']['users'].map((e) {
+        response['data'].map((e) {
           return User.fromJson(e);
         }),
       );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:locstream/views/screens/home.dart';
+import 'package:locstream/views/screens/home/screens/home.dart';
 import 'package:locstream/views/widgets/loading_dialog.dart';
 
 import '../../../core/constants/constants.dart';
@@ -37,7 +37,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(logoutViewModel.notifier).logout();
+    });
+  }
+
+  @override
   void dispose() {
+
     _emailAddressTextController.dispose();
     _passwordTextController.dispose();
 
