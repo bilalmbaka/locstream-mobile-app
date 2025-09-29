@@ -31,6 +31,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(watchingViewModel.notifier).fetch();
+      await ref.read(watchersViewModel.notifier).fetch();
+
       await ref.read(locationViewModel.notifier).getCurrentLocation().then((
         loc,
       ) {
@@ -43,8 +46,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         );
       });
 
-      await ref.read(watchingViewModel.notifier).fetch();
-      await ref.read(watchersViewModel.notifier).fetch();
+
     });
   }
 

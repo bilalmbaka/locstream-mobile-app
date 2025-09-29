@@ -53,7 +53,12 @@ class MapZoomButton extends ConsumerWidget {
                   ),
                   padding: EdgeInsets.all(8),
                   child: isLoading
-                      ? AppLoadingIndicator()
+                      ? AppLoadingIndicator(
+                          width: 15,
+                          height: 15,
+                          strokeWidth: 1,
+                          color: AppColors.primaryColor,
+                        )
                       : Icon(
                           Icons.my_location,
                           size: 15,

@@ -31,6 +31,7 @@ class AppConstants {
       'https://api.mapbox.com/directions/v5/mapbox';
   static const mapBoxPublicKey = String.fromEnvironment('mapboxPublicKey');
   static const mapBoxStyleUrl = String.fromEnvironment('mapboxStyleUrl');
+  static const socketUrl = String.fromEnvironment('socketUrl');
 
   //local storage keys
   static const userKey = 'userProfile';
@@ -42,4 +43,11 @@ class AppConstants {
   static const videos = ['.mp4', '.mkv'];
 
   static const int paginationJump = 20;
+
+  //Socket events
+  static const locationSharesSocketEvent = 'locationSharers';
+  static const locationChangeSocketEvent = 'locationChange';
+  static const connectionErrorEvent = 'connectionError';
+  static const disconnectErrorEvent = 'disconnectErrorEvent';
+  static const reconnectedEvent = 'reconnectedEvent';
 }
