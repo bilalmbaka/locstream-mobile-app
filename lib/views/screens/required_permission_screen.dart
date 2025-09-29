@@ -17,9 +17,9 @@ class RequiredPermissionScreen extends StatefulWidget {
   static const routeName = "required-permissions";
   static const path = "/${routeName}";
 
-  const RequiredPermissionScreen({super.key, required this.nextScreen});
+  const RequiredPermissionScreen({super.key, this.nextScreen});
 
-  final String nextScreen;
+  final String? nextScreen;
 
   @override
   State<RequiredPermissionScreen> createState() =>
@@ -148,10 +148,14 @@ class _RequiredPermissionScreenState extends State<RequiredPermissionScreen> {
   }
 
   void _nextScreen() async {
-    NavigationService.jumpToScreen(
-      context: context,
-      routeName: widget.nextScreen,
-    );
+    if (widget.nextScreen == null) {
+      NavigationService.pop(context: context);
+    } else {
+      NavigationService.jumpToScreen(
+        context: context,
+        routeName: widget.nextScreen!,
+      );
+    }
   }
 
   Widget _button(VoidCallback onTap, String text, {bool isLoading = false}) {

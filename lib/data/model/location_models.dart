@@ -2,6 +2,8 @@ class LocationModel {
   final double lat;
   final double lng;
 
+  const LocationModel({required this.lat, required this.lng});
+
   LocationModel.fromJson(Map<String, dynamic> json)
     : lat = json['lat'].runtimeType == int
           ? json['lat'].toDouble()

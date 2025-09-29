@@ -17,7 +17,7 @@ final publicRoutes = <GoRoute>[
     path: RequiredPermissionScreen.path,
     name: RequiredPermissionScreen.routeName,
     builder: (context, routeState) {
-      return RequiredPermissionScreen(nextScreen: routeState.extra as String);
+      return RequiredPermissionScreen(nextScreen: routeState.extra as String?);
     },
   ),
   ...authRoutes,

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:locstream/data/model/location_models.dart';
 
 class ProfileDto {
   const ProfileDto({
@@ -11,6 +12,7 @@ class ProfileDto {
     this.userName,
     this.pushNotificationToken,
     this.countryFlag,
+    this.location
   });
 
   final String? firstName;
@@ -22,6 +24,7 @@ class ProfileDto {
   final String? userName;
   final String? pushNotificationToken;
   final String? countryFlag;
+  final LocationModel? location;
 
   Future<FormData> toFormData() async {
     return FormData.fromMap({
@@ -29,6 +32,8 @@ class ProfileDto {
         'profilePic': await MultipartFile.fromFile(profilePicture!),
       if (userName != null && userName!.trim() != '')
         'userName': userName!.trim().toLowerCase(),
+      if (location != null)
+        'currentLocation': location!.toJson()
     });
 
     //TODO add pushNotificationToken

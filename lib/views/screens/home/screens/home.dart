@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:locstream/core/styling/colors.dart';
 import 'package:locstream/views/screens/home/widgets/drawer.dart';
+import 'package:locstream/views/screens/home/widgets/map.dart';
 
 class Home extends StatefulWidget {
   static const routeName = 'home';
@@ -19,6 +20,7 @@ class _HomeState extends State<Home> {
       endDrawer: HomeEndDrawer(),
       body: Stack(
         children: [
+          MapScreen(),
           Positioned(
             top: 40,
             right: 20,
