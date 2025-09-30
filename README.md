@@ -83,9 +83,6 @@ samples, guidance on mobile development, and a full API reference.
 6. **Settings:**  
    Adjust privacy and notification preferences in the settings screen.
 
-![Screenshot](assets/screenshots/home.png)  
-_Home screen showing watcher list and location sharing._
-
 ## Project Structure
 
 A brief overview of how the project is structured:
