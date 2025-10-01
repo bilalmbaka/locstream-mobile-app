@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:locstream/data/data_sources/remote_data_sources/wathcers_location_socket.dart';
+import 'package:locstream/data/data_sources/remote_data_sources/watching_location_socket.dart';
 import 'package:locstream/data/model/user_model.dart';
 import 'package:locstream/data/repository/share_location_repository.dart';
 

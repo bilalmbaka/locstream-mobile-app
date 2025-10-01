@@ -15,6 +15,8 @@ class User {
   refreshToken; // This was declared but not used in constructor or methods, added to them.
   final LocationModel?
   currentLocation; // This was declared but not used in constructor or methods, added to them.
+  final String? currentAddress;
+  final DateTime? lastSeen;
   final Asset? profilePicture;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -34,6 +36,8 @@ class User {
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
+    this.currentAddress,
+    this.lastSeen,
   });
 
   // Factory constructor for creating from JSON
@@ -62,6 +66,10 @@ class User {
       deletedAt: json['deletedAt'] != null
           ? DateTime.parse(json['deletedAt'] as String)
           : null,
+      currentAddress: json['currentAddress'],
+      lastSeen: json['lastSeen'] != null
+          ? DateTime.parse(json['lastSeen'] as String)
+          : null,
     );
   }
 
@@ -81,6 +89,8 @@ class User {
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
       'deletedAt': deletedAt?.toIso8601String(),
+      'currentAddress': currentAddress,
+      'lastSeen': lastSeen?.toIso8601String(),
     };
   }
 
@@ -99,6 +109,8 @@ class User {
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
+    String? currentAddress,
+    DateTime? lastSeen,
   }) {
     return User(
       id: id ?? this.id,
@@ -115,6 +127,12 @@ class User {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,
+      currentAddress: currentAddress ?? this.currentAddress,
+      lastSeen: lastSeen ?? this.lastSeen,
     );
   }
+}
+
+extension UserExtension on User {
+  get initials => userName == null ? '_' : userName![0];
 }

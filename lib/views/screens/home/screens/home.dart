@@ -27,14 +27,6 @@ class _HomeState extends ConsumerState<Home> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(watchingViewModel, (previous, next) {
-      if (next.isError) {
-        if (next.errorMessage != null) {
-          AppHelpers.showToast(context, next.errorMessage!);
-        }
-      }
-    });
-
     return Scaffold(
       endDrawer: HomeEndDrawer(),
       body: Stack(

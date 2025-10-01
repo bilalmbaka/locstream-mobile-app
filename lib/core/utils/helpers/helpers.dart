@@ -10,7 +10,7 @@ import 'package:locstream/views/widgets/app_text_field.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../view_models.dart';
 import '../../../views/screens/authentication/login_screen.dart';
@@ -158,15 +158,22 @@ class AppHelpers {
 
   static showSnackBar({
     required BuildContext context,
-    required String message,
+    required Widget content,
     Color? backgroundColor,
   }) {
-    ScaffoldMessenger.of(context).showSnackBar(
+    final messenger = ScaffoldMessenger.of(context);
+
+    messenger.showSnackBar(
       SnackBar(
-        content: AppTextField(text: message),
-        backgroundColor: backgroundColor,
+        content: content,
+        backgroundColor: backgroundColor ?? AppColors.white,
+        duration: Duration(days: 1),
       ),
     );
+  }
+
+  static removeSnackBar(BuildContext context) {
+    ScaffoldMessenger.of(context).clearSnackBars();
   }
 
   static void moveCameraToLocation(
@@ -179,5 +186,15 @@ class AppHelpers {
     final position = LatLng(latitude, longitude);
 
     mapController.move(position, zoomValue);
+  }
+
+  static void launchWebSite(String url) async {
+    final uri = Uri.parse(url);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

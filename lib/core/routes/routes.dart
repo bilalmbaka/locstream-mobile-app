@@ -3,6 +3,7 @@ import 'package:locstream/views/screens/add_new_watcher.dart';
 import 'package:locstream/views/screens/authentication/set_username.dart';
 import 'package:locstream/views/screens/onboarding/splash_screen.dart';
 import 'package:locstream/views/screens/profile/edit_profile_screen.dart';
+import 'package:locstream/views/screens/profile/other_user_profile_screen.dart';
 import 'package:locstream/views/screens/settings/settings_home.dart';
 
 import '../../views/screens/home/screens/home.dart';
@@ -56,6 +57,13 @@ final privateRoutes = <GoRoute>[
         name: SettingsHome.routeName,
         builder: (context, routeState) {
           return SettingsHome();
+        },
+      ),
+      GoRoute(
+        path: OtherUserProfileScreen.path,
+        name: OtherUserProfileScreen.routeName,
+        builder: (context, routeState) {
+          return OtherUserProfileScreen();
         },
       ),
     ],

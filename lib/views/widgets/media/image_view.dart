@@ -20,6 +20,7 @@ class ImageView extends StatelessWidget {
     this.height,
     this.borderRadius,
     this.canShowFullScreen = false,
+    this.scale,
   });
 
   final String image;
@@ -30,6 +31,7 @@ class ImageView extends StatelessWidget {
   final Color? color;
   final double? borderRadius;
   final bool canShowFullScreen;
+  final double? scale;
 
   Widget _child() {
     if (bytes != null) {
@@ -94,6 +96,7 @@ class ImageView extends StatelessWidget {
       } else {
         return Image.asset(
           image,
+          scale: scale,
           fit: boxFit,
           width: width,
           height: height,

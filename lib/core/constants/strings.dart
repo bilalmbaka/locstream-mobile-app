@@ -189,5 +189,11 @@ class AppStrings {
   static const settings = 'settings';
 
   static const deleteAccount = 'Delete account';
-  static const mapBox = "MapBox";
+  static const mapBox = 'MapBox';
+  static const userProfile = 'User profile';
+  static const currentLocation = 'Current location';
+  static const currentAddress = 'Current address';
+  static const lastSeen = 'Last seen';
+  static const comingSoon = 'Coming Soon';
+  static const journeyToUser = 'Journey to user';
 }

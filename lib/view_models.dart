@@ -19,6 +19,7 @@ import 'package:locstream/view_models/profile/change_password_viewmodel.dart';
 import 'package:locstream/view_models/profile/check_username_availabilty.dart';
 import 'package:locstream/view_models/profile/edit_profile_viewmodel.dart';
 import 'package:locstream/view_models/profile/find_users_viewmodel.dart';
+import 'package:locstream/view_models/profile/other_user_profile_viewmodel.dart';
 import 'package:locstream/view_models/profile/profile_viewmodel.dart';
 import 'package:locstream/view_models/profile/suggest_username_viewmodel.dart';
 import 'package:locstream/view_models/watchers/add_new_watcher_viewmodel.dart';
@@ -130,4 +131,9 @@ final directionsViewModel =
       () => DirectionsViewmodel(
         mapsUseCase: MapsUseCase(mapsRepository: MapsRepository()),
       ),
+    );
+
+final otherUserProfileViewModel =
+    NotifierProvider<OtherUserProfileViewModel, OtherUserProfileState>(
+      () => OtherUserProfileViewModel(profileUseCase: _profileUseCase),
     );

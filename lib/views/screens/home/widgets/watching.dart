@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:locstream/core/services/navigation_service.dart';
 import 'package:locstream/view_models.dart';
 import 'package:locstream/views/screens/home/widgets/user_tile.dart';
+import 'package:locstream/views/screens/profile/other_user_profile_screen.dart';
 import 'package:locstream/views/widgets/shimmers/container_shimmer.dart';
 import 'package:locstream/views/widgets/status_wrapper.dart';
 
@@ -43,17 +45,39 @@ class _WatchingState extends ConsumerState<Watching> {
           child: Column(
             spacing: 10,
             children: [
-              ...List.generate(
-                (watching.data ?? []).length,
-                (index) {
-                  final user = watching.data![index];
+              ...List.generate((watching.data ?? []).length, (index) {
+                final user = watching.data![index];
 
-                  return UserTile(
-                    profilePicture: user.data!.profilePicture,
-                    userName: user.data!.userName ?? '',
-                  );
-                },
-              ),
+                return GestureDetector(
+                  onTap: () {
+                    ref.read(otherUserProfileViewModel.notifier).profile =
+                        user.data!;
+
+                    NavigationService.pop(context: context);
+
+                    NavigationService.pushToScreen(
+                      context: context,
+                      routeName: OtherUserProfileScreen.routeName,
+                    );
+                  },
+
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    spacing: 10,
+                    children: [
+                      UserTile(
+                        profilePicture: user.data!.profilePicture,
+                        userName: user.data!.userName ?? '',
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: Icon(Icons.arrow_forward_ios_outlined, size: 12),
+                      ),
+                    ],
+                  ),
+                );
+              }),
             ],
           ),
         );

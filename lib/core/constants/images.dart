@@ -36,4 +36,5 @@ class Images {
   static final noInternet = 'no-connection'.gif;
   static final verified = 'verified'.gif;
   static final bulb = 'bulb'.pngIcon;
+  static final mapbox = 'mapbox'.pngIcon;
 }

@@ -1,9 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:locstream/core/constants/constants.dart';
-import 'package:locstream/core/utils/helpers/helpers.dart';
-import 'package:locstream/data/data_sources/remote_data_sources/wathcers_location_socket.dart';
+import 'package:locstream/data/data_sources/remote_data_sources/watching_location_socket.dart';
 import 'package:locstream/data/model/user_model.dart';
-import 'package:locstream/domain/use_case/auth_usecase.dart';
 import 'package:locstream/domain/use_case/share_location_use_case.dart';
 
 import '../../core/error_handlers/exception_handler.dart';
@@ -21,6 +21,10 @@ class WatchingViewModel extends Notifier<WatchingState> {
   WatchingState build() {
     shareLocationUseCase.watchingUsersStreamController().stream.listen(
       (WatchingSocketEvent data) {
+        print('In view model socket data stream ==========> ${data.event}');
+        print('In view model socket data stream user is ========> ${data.user?.toJson()}');
+
+
         if (data.event == AppConstants.reconnectedEvent) {
           state = WatchingState.success(state.data ?? <BaseState<User>>[]);
         }
@@ -70,9 +74,11 @@ class WatchingViewModel extends Notifier<WatchingState> {
     shareLocationUseCase.connectWatchingSocket();
   }
 
-  Future<void> fetch() async {
+  Future<void> fetch({bool showLoading = true}) async {
     try {
-      state = BaseState.loading(data: state.data);
+      if (showLoading) {
+        state = BaseState.loading(data: state.data);
+      }
 
       final users = await shareLocationUseCase.fetchLocationSharers();
 
@@ -86,6 +92,10 @@ class WatchingViewModel extends Notifier<WatchingState> {
       );
 
       state = WatchingState.error(errorMessage, e: e, data: state.data);
+
+      Timer(Duration(seconds: 2), () {
+        fetch(showLoading: false);
+      });
     }
   }
 }

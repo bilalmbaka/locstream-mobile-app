@@ -36,36 +36,41 @@ class WatchingUserLocationsSocket {
             .build(),
       );
 
-
       socket?.onConnect((_) {
         print("Connected to socket");
-       try {
-         socket!.on(AppConstants.locationSharesSocketEvent, (data) {
-           final shareres = data as List<dynamic>;
+      });
 
-           shareres.map((e) {
-             final user = User.fromJson(e);
-             streamController.sink.add(
-               (WatchingSocketEvent(
-                 event: AppConstants.locationSharesSocketEvent,
-                 user: user,
-               )),
-             );
-           });
-         });
+      socket!.on(AppConstants.locationSharesSocketEvent, (data) {
+        print("connected data is =========> ${data}");
 
-         socket!.on(AppConstants.locationChangeSocketEvent, (data) {
-           final user = User.fromJson(data);
-           streamController.sink.add(
-             (WatchingSocketEvent(
-               event: AppConstants.locationChangeSocketEvent,
-               user: user,
-             )),
-           );
-         });
-       }catch(e) {
-         print("Error initializing custom events $e");
-       }
+        try {
+          final watching = data as List<dynamic>;
+
+          for (var e in watching) {
+            final user = User.fromJson(e);
+
+            streamController.sink.add(
+              (WatchingSocketEvent(
+                event: AppConstants.locationSharesSocketEvent,
+                user: user,
+              )),
+            );
+          }
+        }catch(e) {
+          print("error in ${AppConstants.locationSharesSocketEvent} is ${e}");
+        }
+      });
+
+      socket!.on(AppConstants.locationChangeSocketEvent, (data) {
+        print("Location change event =======> ${data}");
+
+        final user = User.fromJson(data);
+        streamController.sink.add(
+          (WatchingSocketEvent(
+            event: AppConstants.locationChangeSocketEvent,
+            user: user,
+          )),
+        );
       });
 
       socket?.onDisconnect((error) {
@@ -88,8 +93,6 @@ class WatchingUserLocationsSocket {
           (WatchingSocketEvent(event: AppConstants.reconnectedEvent)),
         );
       });
-
-
 
       socket?.connect();
     } catch (e) {

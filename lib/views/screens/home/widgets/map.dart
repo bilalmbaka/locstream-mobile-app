@@ -5,15 +5,34 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:locstream/core/constants/constants.dart';
+import 'package:locstream/core/constants/images.dart';
 import 'package:locstream/core/constants/strings.dart';
+import 'package:locstream/core/services/navigation_service.dart';
 import 'package:locstream/core/styling/colors.dart';
+import 'package:locstream/core/styling/text_style.dart';
 
 import 'package:locstream/core/utils/base_state.dart';
 import 'package:locstream/core/utils/helpers/helpers.dart';
 import 'package:locstream/data/model/user_model.dart';
 import 'package:locstream/view_models.dart';
 import 'package:locstream/views/screens/home/widgets/zoom_button.dart';
+import 'package:locstream/views/screens/profile/other_user_profile_screen.dart';
+import 'package:locstream/views/widgets/app_text_field.dart';
+import 'package:locstream/views/widgets/loading_indicator.dart';
+import 'package:locstream/views/widgets/media/image_view.dart';
 import 'package:locstream/views/widgets/profile_picture.dart';
+
+ValueNotifier<TileLayer> tile = ValueNotifier(
+  TileLayer(
+    urlTemplate: AppConstants.mapBoxStyleUrl,
+    userAgentPackageName: AppConstants.packageName,
+    tileProvider: CachedNetworkTileProvider(
+      cacheManager: DefaultCacheManager(),
+    ),
+  ),
+);
+
+ValueNotifier<bool> isNoInternetSnackBarActive = ValueNotifier(false);
 
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({super.key});
@@ -45,8 +64,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           currentLocation.lng,
         );
       });
-
-
     });
   }
 
@@ -58,11 +75,36 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // ref.listen(locationViewModel, (previous, next) {
-    //   if (previous?.data?.latitude != next.data?.latitude &&
-    //       previous?.data?.longitude != next.data?.longitude &&
-    //       _moveCameraToLocation) {}
-    // });
+    ref.listen(watchingViewModel, (previous, next) {
+      if (next.isError) {
+        AppHelpers.showSnackBar(
+          context: context,
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AppTextField(
+                text: next.errorMessage ?? "Lost internet connection",
+                textStyle: AppTextStyle(
+                  context: context,
+                  fontSize: 13,
+                  color: AppColors.primaryColor,
+                ).fw900(),
+              ),
+
+              AppLoadingIndicator(
+                width: 15,
+                height: 15,
+                color: AppColors.primaryColor,
+              ),
+            ],
+          ),
+        );
+      }
+
+      if (next.isSuccess) {
+        AppHelpers.removeSnackBar(context);
+      }
+    });
 
     return Scaffold(
       body: Stack(
@@ -72,6 +114,49 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             alignment: Alignment.bottomRight,
             child: MapZoomButton(mapController: _mapController),
           ),
+          // Consumer(
+          //   builder: (context, ref, child) {
+          //     final watching = ref.watch(watchingViewModel);
+          //
+          //     if (watching.isError) {
+          //       return Align(
+          //         alignment: Alignment.bottomCenter,
+          //         child: Container(
+          //           color: AppColors.white,
+          //           padding: EdgeInsets.only(
+          //             left: 20,
+          //             right: 20,
+          //             bottom: 15,
+          //             top: 5,
+          //           ),
+          //           child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //             children: [
+          //               AppTextField(
+          //                 text:
+          //                     watching.errorMessage ??
+          //                     "Lost internet connection",
+          //                 textStyle: AppTextStyle(
+          //                   context: context,
+          //                   fontSize: 13,
+          //                   color: AppColors.primaryColor,
+          //                 ).fw900(),
+          //               ),
+          //
+          //               AppLoadingIndicator(
+          //                 width: 15,
+          //                 height: 15,
+          //                 color: AppColors.primaryColor,
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //       );
+          //     } else {
+          //       return Offstage();
+          //     }
+          //   },
+          // ),
         ],
       ),
     );
@@ -100,12 +185,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               ),
               children: [
-                TileLayer(
-                  urlTemplate: AppConstants.mapBoxStyleUrl,
-                  userAgentPackageName: AppConstants.packageName,
-                  tileProvider: CachedNetworkTileProvider(
-                    cacheManager: DefaultCacheManager(),
-                  ),
+                ValueListenableBuilder(
+                  valueListenable: tile,
+                  builder: (context, value, child) {
+                    return value;
+                  },
                 ),
                 MarkerLayer(
                   markers: [
@@ -150,15 +234,53 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 PolylineLayer(
                   polylines: polylines.map((e) => Polyline(points: e)).toList(),
                 ),
-                RichAttributionWidget(
-                  attributions: [
-                    TextSourceAttribution(
-                      AppStrings.mapBox,
-                      onTap: () => {
-                        //TODO open map box website
-                      },
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 5.0, bottom: 4.0),
+                    child: SizedBox(
+                      width: 70,
+                      child: LogoSourceAttribution(
+                        ImageView(image: Images.mapbox, boxFit: BoxFit.contain),
+                      ),
                     ),
-                  ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 5.0, bottom: 8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 5,
+                      children: [
+                        TextSourceAttribution(
+                          AppStrings.mapBox,
+                          textStyle: AppTextStyle(
+                            context: context,
+                            fontSize: 12,
+                          ).fw900(),
+                          onTap: () => {
+                            AppHelpers.launchWebSite(
+                              "https://www.mapbox.com/about/maps",
+                            ),
+                          },
+                        ),
+                        TextSourceAttribution(
+                          "OpenStreetMap",
+                          textStyle: AppTextStyle(
+                            context: context,
+                            fontSize: 12,
+                          ).fw900(),
+                          onTap: () => {
+                            AppHelpers.launchWebSite(
+                              "https://www.openstreetmap.org/",
+                            ),
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -176,21 +298,12 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   void _onTapMarker(BuildContext context, User e) {
-    // if (location != null) {
-    //   ref
-    //       .read(directionsViewModel.notifier)
-    //       .fetchAndAddDirection(
-    //         originLng: location.longitude,
-    //         originLat: location.latitude,
-    //         destLng: e.location!.lng!,
-    //         destLat: e.location!.lat!,
-    //       );
-    // }
-    //
-    // DialogHelpers.showAppDialog(
-    //   context: context,
-    //   child: DisposalInfo(disposalLocation: e),
-    // );
+    ref.read(otherUserProfileViewModel.notifier).profile = e;
+
+    NavigationService.pushToScreen(
+      context: context,
+      routeName: OtherUserProfileScreen.routeName,
+    );
   }
 }
 

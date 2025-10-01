@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:locstream/data/data_sources/remote_data_sources/share_location_remote_data_source.dart';
-import 'package:locstream/data/data_sources/remote_data_sources/wathcers_location_socket.dart';
+import 'package:locstream/data/data_sources/remote_data_sources/watching_location_socket.dart';
 import 'package:locstream/data/model/user_model.dart';
 
 class ShareLocationRepository {
