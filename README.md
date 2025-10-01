@@ -123,3 +123,12 @@ Anyone is free to clone, use, modify, and distribute this repository and its con
 ## Contact
 
 Bilal Mbaka - mbakabilal@yahoo.com
+
+
+## Images attributions
+<a href="https://www.flaticon.com/free-icons/privilege" title="privilege icons">Privilege icons created by sahila99 - Flaticon</a>
+<a href="https://www.flaticon.com/free-animated-icons/no-connection" title="no-connection animated icons">No-connection animated icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-animated-icons/machine-learning" title="machine-learning animated icons">Machine-learning animated icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-animated-icons/correct" title="correct animated icons">Correct animated icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/suggestion" title="suggestion icons">Suggestion icons created by Nurlaili - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/visibility" title="visibility icons">Visibility icons created by smashingstocks - Flaticon</a>

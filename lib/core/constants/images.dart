@@ -37,4 +37,5 @@ class Images {
   static final verified = 'verified'.gif;
   static final bulb = 'bulb'.pngIcon;
   static final mapbox = 'mapbox'.pngIcon;
+  static final appLogo = 'eye'.pngIcon;
 }

@@ -59,12 +59,8 @@ class ImageView extends StatelessWidget {
             child: Container(
               width: width,
               height: height,
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor,
-              ),
-              child: CupertinoActivityIndicator(
-                color: AppColors.white,
-              ),
+              decoration: BoxDecoration(color: AppColors.primaryColor),
+              child: CupertinoActivityIndicator(color: AppColors.white),
             ),
           );
         },
@@ -74,9 +70,7 @@ class ImageView extends StatelessWidget {
             child: Container(
               width: width,
               height: height,
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor,
-              ),
+              decoration: BoxDecoration(color: AppColors.primaryColor),
             ),
           );
         },
@@ -90,8 +84,9 @@ class ImageView extends StatelessWidget {
           fit: boxFit,
           width: width,
           height: height,
-          colorFilter:
-              color == null ? null : ColorFilter.mode(color!, BlendMode.srcIn),
+          colorFilter: color == null
+              ? null
+              : ColorFilter.mode(color!, BlendMode.srcIn),
         );
       } else {
         return Image.asset(
@@ -106,12 +101,7 @@ class ImageView extends StatelessWidget {
     }
 
     //Assume it is a file
-    return Image.file(
-      File(image),
-      fit: boxFit,
-      width: width,
-      height: height,
-    );
+    return Image.file(File(image), fit: boxFit, width: width, height: height);
   }
 
   @override
@@ -119,17 +109,18 @@ class ImageView extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius ?? 0),
       child: GestureDetector(
-          onTap: canShowFullScreen
-              ? () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => FullscreenImageview(
-                                image: image,
-                              )));
-                }
-              : null,
-          child: _child()),
+        onTap: canShowFullScreen
+            ? () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FullscreenImageview(image: image),
+                  ),
+                );
+              }
+            : null,
+        child: _child(),
+      ),
     );
   }
 }

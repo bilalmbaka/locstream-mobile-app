@@ -2,15 +2,18 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:locstream/core/constants/images.dart';
 
 import 'package:locstream/core/services/location_service.dart';
 import 'package:locstream/core/services/push_notification/notification_service.dart';
+import 'package:locstream/core/styling/colors.dart';
 import 'package:locstream/data/data_sources/local_data_sources/profile_local_data_source.dart';
 import 'package:locstream/view_models.dart';
 import 'package:locstream/views/screens/authentication/set_username.dart';
 import 'package:locstream/views/screens/authentication/signup_email_verification_screen.dart';
 import 'package:locstream/views/screens/home/screens/home.dart';
 import 'package:locstream/views/screens/required_permission_screen.dart';
+import 'package:locstream/views/widgets/media/image_view.dart';
 
 import '../../../core/services/navigation_service.dart';
 import '../../../data/data_sources/local_data_sources/auth_local_data_source.dart';
@@ -93,23 +96,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // Positioned.fill(
-          //   child: ImageView(
-          //     image: Images.blurredColor,
-          //     width: double.infinity,
-          //     height: double.infinity,
-          //   ),
-          // ),
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
-              child: Container(),
-            ),
-          ),
-          // Center(child: ImageView(image: Images.logo)),
-        ],
+      body: Center(
+        child: ImageView(
+          image: Images.appLogo,
+          color: AppColors.white,
+          width: 80,
+          height: 80,
+        ),
       ),
     );
   }
