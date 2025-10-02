@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:locstream/views/widgets/app_text_field.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -74,7 +76,7 @@ class AppHelpers {
 
   static printToLog(String message) {
     if (kDebugMode) {
-      print("======================= \n\n$message =======================\n\n");
+      print('======================= \n\n$message =======================\n\n');
     }
   }
 
@@ -83,12 +85,13 @@ class AppHelpers {
   }
 
   static Future<List<File>> pickMedia({
-    required List<String> fileTypes,
+    required FileType fileType,
+    List<String>? fileTypes,
     bool allowMultiples = false,
   }) async {
     final media = await FilePicker.platform.pickFiles(
       allowedExtensions: fileTypes,
-      type: FileType.custom,
+      type: fileType,
       allowMultiple: allowMultiples,
     );
 
@@ -153,7 +156,7 @@ class AppHelpers {
     required String text,
   }) async {
     await Clipboard.setData(ClipboardData(text: text));
-    AppHelpers.showToast(context, "Copied to clipboard");
+    AppHelpers.showToast(context, 'Copied to clipboard');
   }
 
   static showSnackBar({
@@ -196,5 +199,55 @@ class AppHelpers {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  static Future<AppInfo> fetchDeviceAndPackageInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    final flavor = AppConstants.flavor;
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+
+      return AppInfo(
+        flavor: flavor,
+        osVersion: androidInfo.version.sdkInt.toString(),
+        os: 'Android',
+        appVersion: version,
+        deviceMake: androidInfo.brand,
+      );
+    } else {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+
+      return AppInfo(
+        flavor: flavor,
+        osVersion: iosInfo.systemVersion,
+        os: 'IOS',
+        appVersion: '$version.$buildNumber',
+        deviceMake: iosInfo.modelName,
+      );
+    }
+  }
+}
+
+class AppInfo {
+  final String flavor;
+  final String osVersion;
+  final String os;
+  final String appVersion;
+  final String deviceMake;
+
+  const AppInfo({
+    required this.flavor,
+    required this.osVersion,
+    required this.os,
+    required this.appVersion,
+    required this.deviceMake,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {'deviceMake': deviceMake, 'os': os, 'osVersion': osVersion};
   }
 }

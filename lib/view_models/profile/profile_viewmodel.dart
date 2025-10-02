@@ -38,7 +38,6 @@ class ProfileViewModel extends Notifier<ProfileState> {
     }
   }
 
-
   Future<void> getProfile() async {
     try {
       state = BaseState.loading(data: state.data);

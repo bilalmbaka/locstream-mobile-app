@@ -20,8 +20,9 @@ class _HomeState extends ConsumerState<Home> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.read(watchingViewModel.notifier).connect();
+      ref.read(profileViewModel.notifier).getProfile();
     });
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:locstream/core/constants/strings.dart';
+import 'package:locstream/core/error_handlers/exception_handler.dart';
 import 'package:locstream/core/styling/text_style.dart';
 import 'package:locstream/core/utils/extensions/string_extension.dart';
 import 'package:locstream/core/utils/helpers/helpers.dart';
@@ -31,13 +32,41 @@ class SettingsHome extends StatelessWidget {
               ],
             ),
 
-            AppTextField(
-              text: "Version 1.2.3",
-              textStyle: AppTextStyle(context: context, fontSize: 12).fw900(),
+            FutureBuilder(
+              future: fetchAppInfo(),
+              builder: (context, state) {
+                if (state.hasData) {
+                  final data = state.data;
+
+                  if (data == null) return Offstage();
+
+                  return AppTextField(
+                    text: data.appVersion,
+                    textStyle: AppTextStyle(
+                      context: context,
+                      fontSize: 12,
+                    ).fw900(),
+                  );
+                }
+
+                return Offstage();
+              },
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<AppInfo?> fetchAppInfo() async {
+    try {
+      final info = await AppHelpers.fetchDeviceAndPackageInfo();
+
+      return info;
+    } catch (e, s) {
+      AppExceptionHandler.handleException(e, stackTrace: s, sendToLogger: true);
+
+      return null;
+    }
   }
 }

@@ -32,6 +32,7 @@ class AppConstants {
   static const mapBoxPublicKey = String.fromEnvironment('mapboxPublicKey');
   static const mapBoxStyleUrl = String.fromEnvironment('mapboxStyleUrl');
   static const socketUrl = String.fromEnvironment('socketUrl');
+  static const flavor = String.fromEnvironment('appFlavor');
 
   //local storage keys
   static const userKey = 'userProfile';

@@ -33,12 +33,14 @@ class HomeEndDrawer extends ConsumerWidget {
               children: [
                 Consumer(
                   builder: (context, ref, child) {
-                    final userProfile = ref.read(profileViewModel).data;
+                    final userProfile = ref.watch(profileViewModel).data;
 
                     return ProfilePicture(
                       initials: userProfile!.userName![0],
                       profilePicture: userProfile.profilePicture?.url,
                       initialsFontSize: 50,
+                      width: 100,
+                      height: 100,
                     );
                   },
                 ),

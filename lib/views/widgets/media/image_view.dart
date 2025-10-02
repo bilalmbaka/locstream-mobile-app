@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:locstream/views/widgets/loading_indicator.dart';
 
 import '../../../core/styling/colors.dart';
 import '../../../core/utils/extensions/string_extension.dart';
@@ -60,7 +61,7 @@ class ImageView extends StatelessWidget {
               width: width,
               height: height,
               decoration: BoxDecoration(color: AppColors.primaryColor),
-              child: CupertinoActivityIndicator(color: AppColors.white),
+              child: AppLoadingIndicator(),
             ),
           );
         },

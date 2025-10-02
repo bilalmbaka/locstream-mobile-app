@@ -196,4 +196,6 @@ class AppStrings {
   static const lastSeen = 'Last seen';
   static const comingSoon = 'Coming Soon';
   static const journeyToUser = 'Journey to user';
+
+  static const profileUpdateSuccessful = 'Profile updated successfully';
 }

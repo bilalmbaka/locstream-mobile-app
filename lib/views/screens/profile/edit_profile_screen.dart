@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -54,6 +55,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     ref.listen(editProfileViewModel, (previous, next) {
       if (next.isSuccess) {
         ref.read(profileViewModel.notifier).profile = next.data!;
+        AppHelpers.showToast(context, AppStrings.profileUpdateSuccessful);
       }
 
       if (next.isError) {
@@ -81,10 +83,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     child: GestureDetector(
                       onTap: () async {
                         final image = await AppHelpers.pickMedia(
-                          fileTypes: AppConstants.images,
+                          fileType: FileType.image,
                         );
 
-                        if (image.isNotEmpty) profilePicture = image.first;
+                        if (image.isNotEmpty) {
+                          setState(() {
+                            profilePicture = image.first;
+                          });
+                        }
                       },
                       child: Column(
                         spacing: 10,
@@ -96,6 +102,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                 profilePicture?.path ??
                                 profile.profilePicture?.url,
                             initialsFontSize: 70,
+                            width: 150,
+                            height: 150,
                           ),
                           AppTextField(
                             text: "Change",
@@ -133,7 +141,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         .editProfile(
                           ProfileDto(
                             profilePicture: profilePicture?.path,
-                            userName: _userNameTextController.text,
+                            userName:
+                                _userNameTextController.text == profile.userName
+                                ? null
+                                : _userNameTextController.text,
                           ),
                         );
                   },

@@ -56,9 +56,9 @@ class User {
               json['currentLocation'] as Map<String, dynamic>,
             )
           : null,
-      profilePicture: json['profilePic'] != null
+      profilePicture: json['profilePicture'] != null
           ? Asset.fromJson(
-              json['profilePic'] as Map<String, dynamic>,
+              json['profilePicture'] as Map<String, dynamic>,
             ) // Corrected parsing
           : null,
       createdAt: DateTime.parse(json['createdAt'] as String),
@@ -85,7 +85,7 @@ class User {
       'accessToken': accessToken,
       'refreshToken': refreshToken,
       'currentLocation': currentLocation?.toJson(),
-      'profilePic': profilePicture?.toJson(), // Corrected serialization
+      'profilePicture': profilePicture?.toJson(), // Corrected serialization
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
       'deletedAt': deletedAt?.toIso8601String(),

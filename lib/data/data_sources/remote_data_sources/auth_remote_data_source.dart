@@ -1,6 +1,4 @@
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:locstream/core/utils/helpers/helpers.dart';
 import 'package:locstream/data/model/user_model.dart';
 
 import '../../../core/constants/constants.dart';
@@ -12,28 +10,6 @@ class AuthRemoteDataSource {
     baseUrl: '${AppConstants.baseUrl}/auth',
     unAuthorized: true,
   );
-
-  Future<Map<String, dynamic>> _fetchDeviceInfo() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-
-      return {
-        'deviceMake': androidInfo.brand,
-        'os': 'Android',
-        'osVersion': androidInfo.version.sdkInt.toString(),
-      };
-    } else {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-
-      return {
-        'deviceMake': iosInfo.modelName,
-        'os': 'IOS',
-        'osVersion': iosInfo.systemVersion,
-      };
-    }
-  }
 
   Future<void> signup(SignupDto signupDto) async {
     try {
@@ -47,7 +23,11 @@ class AuthRemoteDataSource {
     try {
       final response = await apiService.post(
         '/verify-account',
-        data: {'otp': otp, 'email': email, ...(await _fetchDeviceInfo())},
+        data: {
+          'otp': otp,
+          'email': email,
+          ...((await AppHelpers.fetchDeviceAndPackageInfo()).toJson()),
+        },
       );
 
       return User.fromJson(response['data']);
@@ -68,7 +48,10 @@ class AuthRemoteDataSource {
     try {
       final response = await apiService.post(
         '/login',
-        data: {...loginDto.toJson(), ...(await _fetchDeviceInfo())},
+        data: {
+          ...loginDto.toJson(),
+          ...((await AppHelpers.fetchDeviceAndPackageInfo()).toJson()),
+        },
       );
 
       return User.fromJson(response['data']);
@@ -127,7 +110,7 @@ class AuthRemoteDataSource {
       await ApiService(
         baseUrl: '${AppConstants.baseUrl}/auth',
         unAuthorized: false,
-        token: accessToken
+        token: accessToken,
       ).post('/logout');
     } catch (e) {
       rethrow;
