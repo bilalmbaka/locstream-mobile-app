@@ -41,4 +41,15 @@ class ProfileUseCase {
   Future<bool> checkUserNameAvailability({required String userName}) async {
     return await profileRepo.checkUserNameAvailability(userName);
   }
+
+  Future<void> deleteAccount() async {
+    return await profileRepo.deleteAccount();
+  }
+
+  Future<void> contactSupport({
+    required String title,
+    required String body,
+  }) async {
+    return await profileRepo.contactSupport(title: title, body: body);
+  }
 }

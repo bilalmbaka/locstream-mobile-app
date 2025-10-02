@@ -15,12 +15,16 @@ class LoadingDialog extends StatelessWidget {
     required this.state,
     required this.dismissOverlay,
     this.image,
+    this.showSuccessState,
+    this.successMessage,
   });
 
   final Widget child;
   final BaseState state;
   final VoidCallback dismissOverlay;
   final String? image;
+  final bool? showSuccessState;
+  final String? successMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +44,9 @@ class LoadingDialog extends StatelessWidget {
       child: Stack(
         children: [
           child,
-          if (state.isLoading || state.isError)
+          if (state.isLoading ||
+              state.isError ||
+              (state.isSuccess && showSuccessState == true))
             GestureDetector(
               onTap: () {
                 if (state.isLoading == false) {
@@ -56,7 +62,10 @@ class LoadingDialog extends StatelessWidget {
                     Container(
                       constraints: BoxConstraints(maxWidth: 300),
                       margin: EdgeInsets.symmetric(horizontal: 30),
-                      padding: EdgeInsets.symmetric(vertical: 70),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 70,
+                        horizontal: 20,
+                      ),
                       decoration: BoxDecoration(
                         color: Theme.of(context).dialogTheme.backgroundColor,
                         borderRadius: BorderRadius.circular(8),
@@ -76,7 +85,19 @@ class LoadingDialog extends StatelessWidget {
     return Builder(
       builder: (context) {
         if (state.isSuccess) {
-          return Image.asset(Images.verified, width: 100, height: 100);
+          return Column(
+            children: [
+              Image.asset(Images.verified, width: 100, height: 100),
+              if (successMessage != null) ...[
+                AppConstants.mediumYSpace,
+                AppTextField(
+                  text: successMessage!,
+                  textAlign: TextAlign.center,
+                  textStyle: AppTextStyle(context: context).fw600(),
+                ),
+              ],
+            ],
+          );
         } else if (state.isError) {
           String image = Images.dataGif;
 

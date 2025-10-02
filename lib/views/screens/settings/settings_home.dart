@@ -6,6 +6,8 @@ import 'package:locstream/core/styling/text_style.dart';
 import 'package:locstream/core/utils/extensions/string_extension.dart';
 import 'package:locstream/core/utils/helpers/helpers.dart';
 import 'package:locstream/views/screens/profile/screens/change_password_screen.dart';
+import 'package:locstream/views/screens/settings/contact_support_screen.dart';
+import 'package:locstream/views/screens/settings/delete_accont_screen.dart';
 import 'package:locstream/views/widgets/action_tile.dart';
 import 'package:locstream/views/widgets/app_bars/general_app_bar.dart';
 import 'package:locstream/views/widgets/app_text_field.dart';
@@ -37,8 +39,24 @@ class SettingsHome extends StatelessWidget {
                     );
                   },
                 ),
-                ActionTile(title: AppStrings.contactSupport, onTap: () {}),
-                ActionTile(title: AppStrings.deleteAccount, onTap: () {}),
+                ActionTile(
+                  title: AppStrings.contactSupport,
+                  onTap: () {
+                    NavigationService.pushToScreen(
+                      context: context,
+                      routeName: ContactSupportScreen.routeName,
+                    );
+                  },
+                ),
+                ActionTile(
+                  title: AppStrings.deleteAccount,
+                  onTap: () {
+                    NavigationService.pushToScreen(
+                      context: context,
+                      routeName: DeleteAccountScreen.routeName,
+                    );
+                  },
+                ),
               ],
             ),
 

@@ -47,4 +47,15 @@ class ProfileRepository {
   Future<bool> checkUserNameAvailability(String userName) async {
     return await _remoteDataSource.checkIfUserNameAvailable(userName: userName);
   }
+
+  Future<void> deleteAccount() async {
+    return await _remoteDataSource.deleteAccount();
+  }
+
+  Future<void> contactSupport({
+    required String title,
+    required String body,
+  }) async {
+    return await _remoteDataSource.contactSupport(title: title, body: body);
+  }
 }

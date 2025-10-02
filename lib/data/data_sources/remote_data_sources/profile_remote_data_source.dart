@@ -79,4 +79,26 @@ class ProfileRemoteDataSource {
       rethrow;
     }
   }
+
+  Future<void> deleteAccount() async {
+    try {
+      await apiService.delete('/delete-profile');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> contactSupport({
+    required String title,
+    required String body,
+  }) async {
+    try {
+      await apiService.post(
+        '/contact-support',
+        data: {'title': title, 'body': body},
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

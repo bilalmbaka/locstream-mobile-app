@@ -12,11 +12,13 @@ import 'package:locstream/view_models/auth/logout_viewmodel.dart';
 import 'package:locstream/view_models/auth/reset_password_viewmodel.dart';
 import 'package:locstream/view_models/auth/signup_otp_viewmodel.dart';
 import 'package:locstream/view_models/auth/signup_viewmodel.dart';
+import 'package:locstream/view_models/contact_support_viewmodel.dart';
 import 'package:locstream/view_models/directions_viewmodel.dart';
 import 'package:locstream/view_models/location_viewmodel.dart';
 import 'package:locstream/view_models/notifications/push_notifications_viewmodel.dart';
 import 'package:locstream/view_models/profile/change_password_viewmodel.dart';
 import 'package:locstream/view_models/profile/check_username_availabilty.dart';
+import 'package:locstream/view_models/profile/delete_account_viewmodel.dart';
 import 'package:locstream/view_models/profile/edit_profile_viewmodel.dart';
 import 'package:locstream/view_models/profile/find_users_viewmodel.dart';
 import 'package:locstream/view_models/profile/other_user_profile_viewmodel.dart';
@@ -136,4 +138,14 @@ final directionsViewModel =
 final otherUserProfileViewModel =
     NotifierProvider<OtherUserProfileViewModel, OtherUserProfileState>(
       () => OtherUserProfileViewModel(profileUseCase: _profileUseCase),
+    );
+
+final deleteAccountViewModel =
+    NotifierProvider<DeleteAccountViewmodel, DeleteAccountState>(
+      () => DeleteAccountViewmodel(profileUseCase: _profileUseCase),
+    );
+
+final contactSupportViewModel =
+    NotifierProvider<ContactSupportViewModel, ContactSupportState>(
+      () => ContactSupportViewModel(profileUseCase: _profileUseCase),
     );

@@ -68,6 +68,9 @@ class _OtherUserProfileScreenState
                           ProfilePicture(
                             initials: profile.initials,
                             initialsFontSize: 50,
+                            profilePicture: profile.profilePicture?.url,
+                            width: 100,
+                            height: 100,
                           ),
                           AppConstants.smallYSpace,
                           AppTextField(

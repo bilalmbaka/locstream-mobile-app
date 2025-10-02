@@ -132,3 +132,4 @@ Bilal Mbaka - mbakabilal@yahoo.com
 <a href="https://www.flaticon.com/free-animated-icons/correct" title="correct animated icons">Correct animated icons created by Freepik - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/suggestion" title="suggestion icons">Suggestion icons created by Nurlaili - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/visibility" title="visibility icons">Visibility icons created by smashingstocks - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/moody" title="moody icons">Moody icons created by Mohammad Anggi Hardiansyah - Flaticon</a>

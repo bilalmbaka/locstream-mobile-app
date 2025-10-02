@@ -20,6 +20,8 @@ class UserTile extends StatelessWidget {
           profilePicture: profilePicture?.url,
           initialsFontSize: 10,
           defaultWidgetPadding: 10,
+          width: 30,
+          height: 30,
         ),
         AppTextField(
           text: userName,

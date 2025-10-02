@@ -5,6 +5,8 @@ import 'package:locstream/views/screens/onboarding/splash_screen.dart';
 import 'package:locstream/views/screens/profile/screens/change_password_screen.dart';
 import 'package:locstream/views/screens/profile/screens/edit_profile_screen.dart';
 import 'package:locstream/views/screens/profile/screens/other_user_profile_screen.dart';
+import 'package:locstream/views/screens/settings/contact_support_screen.dart';
+import 'package:locstream/views/screens/settings/delete_accont_screen.dart';
 import 'package:locstream/views/screens/settings/settings_home.dart';
 
 import '../../views/screens/home/screens/home.dart';
@@ -72,6 +74,20 @@ final privateRoutes = <GoRoute>[
         name: ChangePasswordScreen.routeName,
         builder: (context, routeState) {
           return ChangePasswordScreen();
+        },
+      ),
+      GoRoute(
+        path: DeleteAccountScreen.path,
+        name: DeleteAccountScreen.routeName,
+        builder: (context, routeState) {
+          return DeleteAccountScreen();
+        },
+      ),
+      GoRoute(
+        path: ContactSupportScreen.path,
+        name: ContactSupportScreen.routeName,
+        builder: (context, routeState) {
+          return ContactSupportScreen();
         },
       ),
     ],

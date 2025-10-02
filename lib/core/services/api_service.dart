@@ -147,6 +147,15 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> delete(String url, {dynamic data}) async {
+    try {
+      final response = await _dio.delete(url, data: data);
+      return _handleResponse(response);
+    } catch (e) {
+      throw ApiExceptionHandler.handleException(e);
+    }
+  }
+
   Future<Map<String, dynamic>> patch(String url,
       {dynamic data, dynamic queryParams}) async {
     try {

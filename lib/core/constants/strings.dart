@@ -200,4 +200,8 @@ class AppStrings {
   static const journeyToUser = 'Journey to user';
 
   static const profileUpdateSuccessful = 'Profile updated successfully';
+  static const otherReason = 'Other reason';
+  static const letUsKnow =
+      'Please let use know why you want to delete your account.';
+  static const delete = "Delete";
 }

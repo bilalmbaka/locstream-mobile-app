@@ -38,4 +38,5 @@ class Images {
   static final bulb = 'bulb'.pngIcon;
   static final mapbox = 'mapbox'.pngIcon;
   static final appLogo = 'eye'.pngIcon;
+  static final moody = 'moody'.pngIcon;
 }
