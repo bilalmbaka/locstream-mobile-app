@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:locstream/core/services/navigation_service.dart';
 import 'package:locstream/view_models.dart';
 import 'package:locstream/views/screens/home/widgets/user_tile.dart';
-import 'package:locstream/views/screens/profile/other_user_profile_screen.dart';
+import 'package:locstream/views/screens/profile/screens/other_user_profile_screen.dart';
 import 'package:locstream/views/widgets/shimmers/container_shimmer.dart';
 import 'package:locstream/views/widgets/status_wrapper.dart';
 

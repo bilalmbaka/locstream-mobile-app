@@ -11,7 +11,7 @@ import 'package:locstream/views/screens/authentication/login_screen.dart';
 import 'package:locstream/views/screens/home/widgets/drawer_tile.dart';
 import 'package:locstream/views/screens/home/widgets/watchers.dart';
 import 'package:locstream/views/screens/home/widgets/watching.dart';
-import 'package:locstream/views/screens/profile/edit_profile_screen.dart';
+import 'package:locstream/views/screens/profile/screens/edit_profile_screen.dart';
 import 'package:locstream/views/screens/settings/settings_home.dart';
 import 'package:locstream/views/widgets/action_tile.dart';
 import 'package:locstream/views/widgets/app_text_field.dart';

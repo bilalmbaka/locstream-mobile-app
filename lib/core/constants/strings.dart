@@ -28,8 +28,10 @@ class AppStrings {
   static const phoneNumber = 'Phone number';
   static const lastNameHint = 'Doe';
   static const firstNameHint = 'Jhon';
+  static const currentPassword = 'Current password';
   static const password = 'Password';
   static const confirmPassword = 'Confirm password';
+  static const confirmNewPassword = 'Confirm new password';
 
   static const resetPassword = 'Reset password';
   static const enterEmailToResetPassword =

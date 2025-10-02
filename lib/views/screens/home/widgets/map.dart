@@ -16,7 +16,7 @@ import 'package:locstream/core/utils/helpers/helpers.dart';
 import 'package:locstream/data/model/user_model.dart';
 import 'package:locstream/view_models.dart';
 import 'package:locstream/views/screens/home/widgets/zoom_button.dart';
-import 'package:locstream/views/screens/profile/other_user_profile_screen.dart';
+import 'package:locstream/views/screens/profile/screens/other_user_profile_screen.dart';
 import 'package:locstream/views/widgets/app_text_field.dart';
 import 'package:locstream/views/widgets/loading_indicator.dart';
 import 'package:locstream/views/widgets/media/image_view.dart';

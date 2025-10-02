@@ -57,10 +57,9 @@ class ImageView extends StatelessWidget {
 
           return ClipRRect(
             borderRadius: BorderRadius.circular(borderRadius ?? 0),
-            child: Container(
+            child: SizedBox(
               width: width,
               height: height,
-              decoration: BoxDecoration(color: AppColors.primaryColor),
               child: AppLoadingIndicator(),
             ),
           );

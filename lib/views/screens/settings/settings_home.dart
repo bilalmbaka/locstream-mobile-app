@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:locstream/core/constants/strings.dart';
 import 'package:locstream/core/error_handlers/exception_handler.dart';
+import 'package:locstream/core/services/navigation_service.dart';
 import 'package:locstream/core/styling/text_style.dart';
 import 'package:locstream/core/utils/extensions/string_extension.dart';
 import 'package:locstream/core/utils/helpers/helpers.dart';
+import 'package:locstream/views/screens/profile/screens/change_password_screen.dart';
 import 'package:locstream/views/widgets/action_tile.dart';
 import 'package:locstream/views/widgets/app_bars/general_app_bar.dart';
 import 'package:locstream/views/widgets/app_text_field.dart';
@@ -26,7 +28,15 @@ class SettingsHome extends StatelessWidget {
             Column(
               spacing: 20,
               children: [
-                ActionTile(title: AppStrings.changePassword, onTap: () {}),
+                ActionTile(
+                  title: AppStrings.changePassword,
+                  onTap: () {
+                    NavigationService.pushToScreen(
+                      context: context,
+                      routeName: ChangePasswordScreen.routeName,
+                    );
+                  },
+                ),
                 ActionTile(title: AppStrings.contactSupport, onTap: () {}),
                 ActionTile(title: AppStrings.deleteAccount, onTap: () {}),
               ],

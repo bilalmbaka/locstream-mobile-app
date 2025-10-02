@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/error_handlers/exception_handler.dart';
 import '../../core/utils/base_state.dart';
-import '../../data/model/user_model.dart';
 import '../../domain/use_case/auth_usecase.dart';
 
 typedef ChangePasswordState = BaseState<void>;

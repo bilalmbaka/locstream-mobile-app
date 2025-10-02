@@ -2,8 +2,9 @@ import 'package:go_router/go_router.dart';
 import 'package:locstream/views/screens/add_new_watcher.dart';
 import 'package:locstream/views/screens/authentication/set_username.dart';
 import 'package:locstream/views/screens/onboarding/splash_screen.dart';
-import 'package:locstream/views/screens/profile/edit_profile_screen.dart';
-import 'package:locstream/views/screens/profile/other_user_profile_screen.dart';
+import 'package:locstream/views/screens/profile/screens/change_password_screen.dart';
+import 'package:locstream/views/screens/profile/screens/edit_profile_screen.dart';
+import 'package:locstream/views/screens/profile/screens/other_user_profile_screen.dart';
 import 'package:locstream/views/screens/settings/settings_home.dart';
 
 import '../../views/screens/home/screens/home.dart';
@@ -64,6 +65,13 @@ final privateRoutes = <GoRoute>[
         name: OtherUserProfileScreen.routeName,
         builder: (context, routeState) {
           return OtherUserProfileScreen();
+        },
+      ),
+      GoRoute(
+        path: ChangePasswordScreen.path,
+        name: ChangePasswordScreen.routeName,
+        builder: (context, routeState) {
+          return ChangePasswordScreen();
         },
       ),
     ],
