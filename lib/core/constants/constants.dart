@@ -38,6 +38,7 @@ class AppConstants {
   static const userKey = 'userProfile';
   static const authTokenKey = 'authToken';
   static const refreshTokenKey = 'refreshToken';
+  static const backgroundLocationUpdateKey = 'backgroundLocationUpdate';
 
   //file types
   static const images = ['.png', '.jpg'];

@@ -39,8 +39,9 @@ class LocationService {
   Stream<Position> locationStream() {
     return Geolocator.getPositionStream(
       locationSettings: LocationSettings(
-
-      )
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10,
+      ),
     );
   }
 }

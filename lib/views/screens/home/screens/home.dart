@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:locstream/core/constants/constants.dart';
+
+import 'package:locstream/core/services/foreground_service.dart';
+import 'package:locstream/core/services/shared_pref/share_prefs_impl.dart';
 import 'package:locstream/core/styling/colors.dart';
-import 'package:locstream/core/utils/helpers/helpers.dart';
 import 'package:locstream/view_models.dart';
 import 'package:locstream/views/screens/home/widgets/drawer.dart';
 import 'package:locstream/views/screens/home/widgets/map.dart';
+
+import '../../../../core/services/location_task_handler.dart';
 
 class Home extends ConsumerStatefulWidget {
   static const routeName = 'home';
@@ -23,6 +28,29 @@ class _HomeState extends ConsumerState<Home> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.read(watchingViewModel.notifier).connect();
       ref.read(profileViewModel.notifier).getProfile();
+
+      sendLocationInBackground.value =
+          await SharedPrefsService().fetchValue<bool>(
+            key: AppConstants.backgroundLocationUpdateKey,
+          ) ??
+          true;
+
+      AppForegroundService.initCommunicationPort();
+      AppForegroundService.initService();
+      await AppForegroundService.requestBootPermission();
+      AppForegroundService.addCallback((data) {
+        final Map<String, dynamic> locationJson = data as Map<String, dynamic>;
+        ref
+            .read(locationViewModel.notifier)
+            .setLocation(
+              latitude: locationJson['lat'] as double,
+              longitude: locationJson['lng'] as double,
+            );
+      });
+
+      if (sendLocationInBackground.value) {
+        await AppForegroundService.start(startLocationHandlerCallback);
+      }
     });
   }
 

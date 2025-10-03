@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:locstream/core/services/shared_pref/share_prefs_impl.dart';
 import 'package:locstream/views/screens/home/screens/home.dart';
 import 'package:locstream/views/widgets/loading_dialog.dart';
 
@@ -41,12 +42,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(logoutViewModel.notifier).logout();
+
+      await SharedPrefsService().delete(
+        key: AppConstants.backgroundLocationUpdateKey,
+      );
     });
   }
 
   @override
   void dispose() {
-
     _emailAddressTextController.dispose();
     _passwordTextController.dispose();
 

@@ -93,10 +93,10 @@ class ProfileRemoteDataSource {
     required String body,
   }) async {
     try {
-      await apiService.post(
-        '/contact-support',
-        data: {'title': title, 'body': body},
-      );
+      await ApiService(
+        baseUrl: '${AppConstants.baseUrl}/customer-support',
+        unAuthorized: true,
+      ).post('', data: {'title': title, 'body': body});
     } catch (e) {
       rethrow;
     }

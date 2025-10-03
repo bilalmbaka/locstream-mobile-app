@@ -149,3 +149,5 @@ final contactSupportViewModel =
     NotifierProvider<ContactSupportViewModel, ContactSupportState>(
       () => ContactSupportViewModel(profileUseCase: _profileUseCase),
     );
+
+final sendLocationInBackground = ValueNotifier<bool>(true);

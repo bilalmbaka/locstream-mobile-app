@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../error_handlers/storage_exception_handler.dart';
 
 class SharedPrefsService {
-  Future<void> setValue({required String key,required dynamic value}) async {
+  Future<void> setValue({required String key, required dynamic value}) async {
     try {
       if (value is List<String>) {
         await _setStringList(key, value);
@@ -11,6 +11,10 @@ class SharedPrefsService {
 
       if (value is String) {
         await _setString(key, value);
+      }
+
+      if (value is bool) {
+        await _setBool(key, value);
       }
     } catch (e) {
       throw StorageExceptionHandler.handleException(e);
@@ -25,6 +29,10 @@ class SharedPrefsService {
 
       if (T == String) {
         return await _getString(key) as T?;
+      }
+
+      if (T == bool) {
+        return await _getBool(key) as T?;
       }
 
       return null;
@@ -45,6 +53,12 @@ class SharedPrefsService {
     await sharedPreferences.setString(key, value);
   }
 
+  Future<void> _setBool(String key, bool value) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+
+    await sharedPreferences.setBool(key, value);
+  }
+
   Future<List<String>?> _getStringList(String key) async {
     final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -55,6 +69,14 @@ class SharedPrefsService {
     final sharedPreferences = await SharedPreferences.getInstance();
 
     final value = sharedPreferences.getString(key);
+
+    return value;
+  }
+
+  Future<bool?> _getBool(String key) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+
+    final value = sharedPreferences.getBool(key);
 
     return value;
   }
