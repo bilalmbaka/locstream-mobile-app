@@ -5,6 +5,7 @@ import 'package:locstream/core/constants/strings.dart';
 import 'package:locstream/core/services/navigation_service.dart';
 import 'package:locstream/core/styling/colors.dart';
 import 'package:locstream/core/styling/text_style.dart';
+import 'package:locstream/data/model/user_model.dart';
 import 'package:locstream/view_models.dart';
 import 'package:locstream/views/screens/add_new_watcher.dart';
 import 'package:locstream/views/screens/authentication/login_screen.dart';
@@ -36,8 +37,8 @@ class HomeEndDrawer extends ConsumerWidget {
                     final userProfile = ref.watch(profileViewModel).data;
 
                     return ProfilePicture(
-                      initials: userProfile!.userName![0],
-                      profilePicture: userProfile.profilePicture?.url,
+                      initials: userProfile?.initials ?? '_',
+                      profilePicture: userProfile?.profilePicture?.url,
                       initialsFontSize: 50,
                       width: 100,
                       height: 100,

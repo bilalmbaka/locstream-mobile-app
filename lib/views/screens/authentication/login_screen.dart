@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:locstream/core/services/foreground_service.dart';
 import 'package:locstream/core/services/shared_pref/share_prefs_impl.dart';
 import 'package:locstream/views/screens/home/screens/home.dart';
 import 'package:locstream/views/widgets/loading_dialog.dart';
@@ -46,6 +47,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       await SharedPrefsService().delete(
         key: AppConstants.backgroundLocationUpdateKey,
       );
+
+      await AppForegroundService.stop();
     });
   }
 
