@@ -5,19 +5,19 @@ class AuthLocalDataSource {
   final SharedPrefsService prefs = SharedPrefsService();
 
   Future<void> saveAuthToken(String token) async {
-    await prefs.setValue(key: AppConstants.authTokenKey, value: token);
+    await prefs.setString(key: AppConstants.authTokenKey, value: token);
   }
 
   Future<String?> getAuthToken() async {
-    return await prefs.fetchValue<String>(key: AppConstants.authTokenKey);
+    return await prefs.getString(AppConstants.authTokenKey);
   }
 
   Future<void> saveRefreshToken(String token) async {
-    await prefs.setValue(key: AppConstants.refreshTokenKey, value: token);
+    await prefs.setString(key: AppConstants.refreshTokenKey, value: token);
   }
 
   Future<String?> getRefreshToken() async {
-    return await prefs.fetchValue<String>(key: AppConstants.refreshTokenKey);
+    return await prefs.getString(AppConstants.refreshTokenKey);
   }
 
   Future<void> deleteAuthTokens() async {

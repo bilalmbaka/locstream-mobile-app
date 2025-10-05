@@ -100,6 +100,8 @@ class AppForegroundService {
 
   static Future<void> stop() async {
     try {
+      if (await isRunningService == false) return;
+
       final ServiceRequestResult result =
           await FlutterForegroundTask.stopService();
 

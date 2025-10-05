@@ -67,12 +67,10 @@ class AuthRepository {
   }
 
   Future<String?> getAccessToken() async {
-    final tokens = await _localDataSource.getAuthToken();
+    final token = await _localDataSource.getAuthToken();
 
-    if (tokens == null) return null;
+    if (token == null) return null;
 
-    final decodedTokens = jsonDecode(tokens);
-
-    return decodedTokens[AppConstants.authTokenKey];
+    return token;
   }
 }

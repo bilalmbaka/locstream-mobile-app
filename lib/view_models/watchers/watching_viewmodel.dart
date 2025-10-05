@@ -17,57 +17,70 @@ class WatchingViewModel extends Notifier<WatchingState> {
 
   final ShareLocationUseCase shareLocationUseCase;
 
+  StreamSubscription<WatchingSocketEvent>? streamSubscription;
+
   @override
   WatchingState build() {
-    shareLocationUseCase.watchingUsersStreamController().stream.listen(
-      (WatchingSocketEvent data) {
-        print('In view model socket data stream ==========> ${data.event}');
-        print('In view model socket data stream user is ========> ${data.user?.toJson()}');
-
-
-        if (data.event == AppConstants.reconnectedEvent) {
-          state = WatchingState.success(state.data ?? <BaseState<User>>[]);
-        }
-
-        if (data.user != null) {
-          final users = state.data ?? <BaseState<User>>[];
-
-          final index = users.indexWhere(
-            (element) => element.data?.id == data.user?.id,
-          );
-
-          if (index == -1) {
-            state = WatchingState.success([
-              ...users,
-              BaseState.success(data.user!),
-            ]);
-          } else {
-            state = WatchingState.success([
-              ...users.sublist(0, index),
-              BaseState.success(data.user!),
-              ...users.sublist(index + 1),
-            ]);
-          }
-        }
-      },
-      onError: (error) {
-        if (error is WatchingSocketEvent) {
-          if (error.event == AppConstants.connectionErrorEvent) {
-            state = WatchingState.error('Connection error', data: state.data);
-          }
-          if (error.event == AppConstants.disconnectErrorEvent) {
-            state = WatchingState.error('Network error', data: state.data);
-          }
-        }
-      },
-    );
-
     return WatchingState.initial();
   }
 
   void reset() {
     shareLocationUseCase.disconnectWatchingSocket();
     state = BaseState.initial();
+  }
+
+  void initialize() {
+    if (streamSubscription != null) return;
+
+    streamSubscription = shareLocationUseCase
+        .watchingUsersStreamController()
+        .stream
+        .listen(
+          (WatchingSocketEvent data) {
+            print('In view model socket data stream ==========> ${data.event}');
+            print(
+              'In view model socket data stream user is ========> ${data.user?.toJson()}',
+            );
+
+            if (data.event == AppConstants.reconnectedEvent) {
+              state = WatchingState.success(state.data ?? <BaseState<User>>[]);
+            }
+
+            if (data.user != null) {
+              final users = state.data ?? <BaseState<User>>[];
+
+              final index = users.indexWhere(
+                (element) => element.data?.id == data.user?.id,
+              );
+
+              if (index == -1) {
+                state = WatchingState.success([
+                  ...users,
+                  BaseState.success(data.user!),
+                ]);
+              } else {
+                state = WatchingState.success([
+                  ...users.sublist(0, index),
+                  BaseState.success(data.user!),
+                  ...users.sublist(index + 1),
+                ]);
+              }
+            }
+          },
+          onError: (error) {
+            if (error is WatchingSocketEvent) {
+              if (error.event == AppConstants.connectionErrorEvent) {
+                state = WatchingState.error(
+                  'Connection error',
+                  data: state.data,
+                );
+              }
+              if (error.event == AppConstants.disconnectErrorEvent) {
+                state = WatchingState.error('Network error', data: state.data);
+              }
+            }
+          },
+        );
   }
 
   void connect() {

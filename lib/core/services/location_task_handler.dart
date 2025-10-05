@@ -1,7 +1,9 @@
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:locstream/core/constants/constants.dart';
 import 'package:locstream/core/services/api_service.dart';
 import 'package:locstream/core/services/location_service.dart';
+import 'package:locstream/data/data_sources/local_data_sources/auth_local_data_source.dart';
 import 'package:locstream/data/model/location_models.dart';
 
 // The callback function should always be a top-level or static function.
@@ -23,29 +25,36 @@ class LocationTaskHandler extends TaskHandler {
         lng: location.longitude,
       );
 
-      // final distanceBetweenLocation = Geolocator.distanceBetween(
-      //   _previousLocation.lat,
-      //   _previousLocation.lng,
-      //   locationModel.lat,
-      //   locationModel.lng,
-      // );
+      final distanceBetweenLocation = Geolocator.distanceBetween(
+        _previousLocation.lat,
+        _previousLocation.lng,
+        locationModel.lat,
+        locationModel.lng,
+      );
 
-      // if (distanceBetweenLocation >= 10) {
+      if (distanceBetweenLocation >= 10) {
+        //When user moves 10 meters
         try {
+          final accessToken = await AuthLocalDataSource().getAuthToken();
+
+          if (accessToken == null) {
+            return;
+          }
+
           final apiService = ApiService(
             baseUrl: '${AppConstants.baseUrl}/user',
+            watchUserState: false,
           );
 
           await apiService.patch(
             '/update-profile',
             data: {'currentLocation': locationModel.toJson()},
           );
-
         } catch (e) {
-          print("Could not post location in foreground service, $e");
+          print('Could not post location in foreground service, $e');
           //DO NOTHING
         }
-      // }
+      }
 
       _previousLocation = locationModel;
 

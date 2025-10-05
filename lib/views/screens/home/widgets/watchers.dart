@@ -34,9 +34,9 @@ class _WatchersState extends ConsumerState<Watchers> {
           ref.read(watchersViewModel).isSuccess == false ||
           (ref.read(watchersViewModel).data ?? []).isEmpty;
 
-      if (showLoading) {
-        await ref.read(watchersViewModel.notifier).fetch();
-      }
+      await ref
+          .read(watchersViewModel.notifier)
+          .fetch(showLoading: showLoading);
     });
   }
 

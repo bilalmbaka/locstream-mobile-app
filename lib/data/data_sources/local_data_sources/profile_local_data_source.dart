@@ -9,12 +9,14 @@ class ProfileLocalDataSource {
   final SharedPrefsService prefs = SharedPrefsService();
 
   Future<void> saveProfile(User user) async {
-    await prefs.setValue(
-        key: AppConstants.userKey, value: jsonEncode(user.toJson()));
+    await prefs.setString(
+      key: AppConstants.userKey,
+      value: jsonEncode(user.toJson()),
+    );
   }
 
   Future<User?> getProfile() async {
-    final user = await prefs.fetchValue<String>(key: AppConstants.userKey);
+    final user = await prefs.getString(AppConstants.userKey);
     return user != null ? User.fromJson(jsonDecode(user)) : null;
   }
 

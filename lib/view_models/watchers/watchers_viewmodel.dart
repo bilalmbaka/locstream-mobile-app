@@ -27,9 +27,11 @@ class WatchersViewModel extends Notifier<WatchersState> {
     state = WatchersState.success(users);
   }
 
-  Future<void> fetch() async {
+  Future<void> fetch({bool showLoading = true}) async {
     try {
-      state = BaseState.loading();
+      if (showLoading) {
+        state = BaseState.loading();
+      }
 
       final users = await shareLocationUseCase.fetchLocationReceivers();
 
@@ -46,7 +48,10 @@ class WatchersViewModel extends Notifier<WatchersState> {
     }
   }
 
-  Future<void> removeWatcher({required BuildContext context,required String userId}) async {
+  Future<void> removeWatcher({
+    required BuildContext context,
+    required String userId,
+  }) async {
     final index = state.data!.indexWhere(
       (element) => element.data!.id == userId,
     );

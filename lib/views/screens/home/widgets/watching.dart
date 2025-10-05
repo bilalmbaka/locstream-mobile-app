@@ -24,9 +24,9 @@ class _WatchingState extends ConsumerState<Watching> {
           ref.read(watchingViewModel).isSuccess == false ||
           (ref.read(watchingViewModel).data ?? []).isEmpty;
 
-      if (showLoading) {
-        await ref.read(watchingViewModel.notifier).fetch();
-      }
+      await ref
+          .read(watchingViewModel.notifier)
+          .fetch(showLoading: showLoading);
     });
   }
 

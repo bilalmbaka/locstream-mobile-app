@@ -26,12 +26,13 @@ class _HomeState extends ConsumerState<Home> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(watchingViewModel.notifier).initialize();
       ref.read(watchingViewModel.notifier).connect();
       ref.read(profileViewModel.notifier).getProfile();
 
       sendLocationInBackground.value =
-          await SharedPrefsService().fetchValue<bool>(
-            key: AppConstants.backgroundLocationUpdateKey,
+          await SharedPrefsService().getBool(
+            AppConstants.backgroundLocationUpdateKey,
           ) ??
           true;
 
@@ -40,12 +41,14 @@ class _HomeState extends ConsumerState<Home> {
       await AppForegroundService.requestBootPermission();
       AppForegroundService.addCallback((data) {
         final Map<String, dynamic> locationJson = data as Map<String, dynamic>;
-        ref
-            .read(locationViewModel.notifier)
-            .setLocation(
-              latitude: locationJson['lat'] as double,
-              longitude: locationJson['lng'] as double,
-            );
+        if (mounted) {
+          ref
+              .read(locationViewModel.notifier)
+              .setLocation(
+                latitude: locationJson['lat'] as double,
+                longitude: locationJson['lng'] as double,
+              );
+        }
       });
 
       if (sendLocationInBackground.value) {

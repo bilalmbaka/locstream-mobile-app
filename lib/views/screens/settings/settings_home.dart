@@ -138,7 +138,7 @@ class SettingsHome extends StatelessWidget {
       await AppForegroundService.start(startLocationHandlerCallback);
     }
 
-    await SharedPrefsService().setValue(
+    await SharedPrefsService().setBool(
       key: AppConstants.backgroundLocationUpdateKey,
       value: status,
     );

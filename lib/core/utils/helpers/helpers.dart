@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:locstream/views/widgets/app_text_field.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -195,15 +194,11 @@ class AppHelpers {
     final uri = Uri.parse(url);
 
     if (await canLaunchUrl(uri)) {
-      await launchUrl(
-        uri,
-      );
+      await launchUrl(uri);
     } else {
       throw 'Could not launch $url';
     }
   }
-
-
 
   static Future<AppInfo> fetchDeviceAndPackageInfo() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();

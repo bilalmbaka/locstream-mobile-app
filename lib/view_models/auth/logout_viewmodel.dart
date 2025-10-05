@@ -24,8 +24,9 @@ class LogoutViewModel extends Notifier<LogoutState> {
     try {
       ref.read(watchingViewModel.notifier).reset();
 
+      // ref.invalidate(watchingViewModel);
+
       ref.read(profileViewModel.notifier).reset();
-      ref.read(watchingViewModel);
       ref.invalidate(watchersViewModel);
       ref.invalidate(findUsersViewModel);
       ref.invalidate(suggestUserNameViewModel);

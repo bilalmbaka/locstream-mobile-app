@@ -33,7 +33,7 @@ class ProfileRemoteDataSource {
     }
   }
 
-  Future<List<User>> findUsers({String? searchString, int startAt = 1}) async {
+  Future<List<User>> findUsers({String? searchString, int startAt = 0}) async {
     try {
       final response = await apiService.get(
         '/find',
@@ -94,9 +94,9 @@ class ProfileRemoteDataSource {
   }) async {
     try {
       await ApiService(
-        baseUrl: '${AppConstants.baseUrl}/customer-support',
-        unAuthorized: true,
-      ).post('', data: {'title': title, 'body': body});
+        baseUrl: AppConstants.baseUrl,
+        unAuthorized: false,
+      ).post('/customer-support', data: {'title': title, 'body': body});
     } catch (e) {
       rethrow;
     }
