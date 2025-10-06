@@ -212,15 +212,3 @@ class _OtpFieldState extends State<OtpField> {
     }
   }
 }
-
-// focusNode: _focusNodes[index],
-//                         onKeyEvent: (KeyEvent event) {
-//                           if (event is KeyDownEvent) {
-//                             if (event.logicalKey ==
-//                                 LogicalKeyboardKey.backspace) {
-//                               if (_textControllers[index].text.isEmpty) {
-//                                 _changeFocus(movingForward: false);
-//                               }
-//                             }
-//                           }
-//                         },

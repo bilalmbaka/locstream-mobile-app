@@ -1,5 +1,4 @@
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:locstream/core/constants/constants.dart';
 import 'package:locstream/core/services/api_service.dart';
 import 'package:locstream/core/services/location_service.dart';
@@ -14,7 +13,7 @@ void startLocationHandlerCallback() {
 
 class LocationTaskHandler extends TaskHandler {
   final locationService = LocationService();
-  LocationModel _previousLocation = LocationModel(lat: 0, lng: 0);
+  // LocationModel _previousLocation = LocationModel(lat: 0, lng: 0);
 
   // Called when the task is started.
   @override
@@ -25,15 +24,16 @@ class LocationTaskHandler extends TaskHandler {
         lng: location.longitude,
       );
 
-      final distanceBetweenLocation = Geolocator.distanceBetween(
-        _previousLocation.lat,
-        _previousLocation.lng,
-        locationModel.lat,
-        locationModel.lng,
-      );
+      // final distanceBetweenLocation = Geolocator.distanceBetween(
+      //   _previousLocation.lat,
+      //   _previousLocation.lng,
+      //   locationModel.lat,
+      //   locationModel.lng,
+      // );
 
-      if (distanceBetweenLocation >= 10) {
-        //When user moves 10 meters
+      // int time = 0;
+
+      // if (time == 5) {
         try {
           final accessToken = await AuthLocalDataSource().getAuthToken();
 
@@ -54,9 +54,13 @@ class LocationTaskHandler extends TaskHandler {
           print('Could not post location in foreground service, $e');
           //DO NOTHING
         }
-      }
 
-      _previousLocation = locationModel;
+        // time = 0;
+      // }
+
+      // _previousLocation = locationModel;
+
+      // time++;
 
       FlutterForegroundTask.sendDataToMain(locationModel.toJson());
     });

@@ -40,7 +40,7 @@ class LocationService {
     return Geolocator.getPositionStream(
       locationSettings: LocationSettings(
         accuracy: LocationAccuracy.high,
-        distanceFilter: 10,
+        distanceFilter: 5, //meters
       ),
     );
   }

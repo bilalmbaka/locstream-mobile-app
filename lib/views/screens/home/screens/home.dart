@@ -3,8 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:locstream/core/constants/constants.dart';
 
 import 'package:locstream/core/services/foreground_service.dart';
+import 'package:locstream/core/services/location_service.dart';
 import 'package:locstream/core/services/shared_pref/share_prefs_impl.dart';
 import 'package:locstream/core/styling/colors.dart';
+import 'package:locstream/data/model/location_models.dart';
+import 'package:locstream/domain/entities/profile_dto.dart';
 import 'package:locstream/view_models.dart';
 import 'package:locstream/views/screens/home/widgets/drawer.dart';
 import 'package:locstream/views/screens/home/widgets/map.dart';
@@ -54,6 +57,15 @@ class _HomeState extends ConsumerState<Home> {
       if (sendLocationInBackground.value) {
         await AppForegroundService.start(startLocationHandlerCallback);
       }
+
+      final location = await LocationService().currentLocation();
+      ref
+          .read(editProfileViewModel.notifier)
+          .editProfile(
+            ProfileDto(
+              location: LocationModel(lat: location.lat, lng: location.lng),
+            ),
+          );
     });
   }
 
