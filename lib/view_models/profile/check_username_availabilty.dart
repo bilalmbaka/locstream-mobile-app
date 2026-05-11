@@ -18,6 +18,8 @@ class CheckUserNameAvailability extends Notifier<UserNameAvailabilityState> {
     return UserNameAvailabilityState.initial();
   }
 
+  void reset() => state = BaseState.initial();
+
   Future<void> check({required String userName}) async {
     try {
       state = BaseState.loading();
@@ -33,7 +35,10 @@ class CheckUserNameAvailability extends Notifier<UserNameAvailabilityState> {
 
       if (e is ApiException) {
         if (e.statusCode == 409) {
-          state = UserNameAvailabilityState.error('Username is taken', e: e);
+          state = UserNameAvailabilityState.error(
+            'Username is taken',
+            e: UserNameUnAvailableException(),
+          );
 
           return;
         }

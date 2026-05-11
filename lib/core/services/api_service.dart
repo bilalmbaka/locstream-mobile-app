@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -78,8 +79,12 @@ class ApiService {
               final newRefreshToken =
                   refreshTokenResponse['data']['refreshToken'] as String;
 
-              print('New access token, ====== ${newAccessToken}');
-              print('New refresh token, ====== ${newRefreshToken}');
+              if (kDebugMode) {
+                print('New access token, ====== $newAccessToken');
+              }
+              if (kDebugMode) {
+                print('New refresh token, ====== $newRefreshToken');
+              }
 
               await AuthLocalDataSource().saveAuthToken(newAccessToken.trim());
               await AuthLocalDataSource().saveRefreshToken(
@@ -105,7 +110,9 @@ class ApiService {
               );
             }
           } catch (e) {
-            print('Error refreshing token $e ');
+            if (kDebugMode) {
+              print('Error refreshing token $e ');
+            }
 
             if ((e is IrrecoverableTokenException ||
                     (e.runtimeType == DioException &&

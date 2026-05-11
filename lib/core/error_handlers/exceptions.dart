@@ -27,15 +27,20 @@ class ApiException implements Exception {
   }
 }
 
+class UserNameUnAvailableException implements Exception {}
+
 class NoNetworkException extends ApiException {
   const NoNetworkException({
     this.message = 'Network unreachable',
     required this.exception,
     this.statusCode,
-  }) : super(message: message, exception: exception);
+  }) : super(message: message, exception: exception, statusCode: statusCode);
 
+  @override
   final String message;
+  @override
   final Object exception;
+  @override
   final int? statusCode;
 
   @override

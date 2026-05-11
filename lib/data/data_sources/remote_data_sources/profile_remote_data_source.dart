@@ -69,7 +69,10 @@ class ProfileRemoteDataSource {
 
   Future<bool> checkIfUserNameAvailable({required String userName}) async {
     try {
-      await apiService.get(
+      await ApiService(
+        baseUrl: '${AppConstants.baseUrl}/user',
+        unAuthorized: true,
+      ).get(
         '/username-free',
         queryParams: {'userName': userName.trim().toLowerCase()},
       );

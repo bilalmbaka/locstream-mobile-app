@@ -45,39 +45,51 @@ class _WatchingState extends ConsumerState<Watching> {
           child: Column(
             spacing: 10,
             children: [
-              ...List.generate((watching.data ?? []).length, (index) {
-                final user = watching.data![index];
-
-                return GestureDetector(
-                  onTap: () {
-                    ref.read(otherUserProfileViewModel.notifier).profile =
-                        user.data!;
-
-                    NavigationService.pop(context: context);
-
-                    NavigationService.pushToScreen(
-                      context: context,
-                      routeName: OtherUserProfileScreen.routeName,
-                    );
-                  },
-
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    spacing: 10,
-                    children: [
-                      UserTile(
-                        profilePicture: user.data!.profilePicture,
-                        userName: user.data!.userName ?? '',
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: Icon(Icons.arrow_forward_ios_outlined, size: 12),
-                      ),
-                    ],
+              if ((watching.data ?? []).isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: Text(
+                    'You are not watching anyone.',
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                );
-              }),
+                )
+              else
+                ...List.generate((watching.data ?? []).length, (index) {
+                  final user = watching.data![index];
+
+                  return GestureDetector(
+                    onTap: () {
+                      ref.read(otherUserProfileViewModel.notifier).profile =
+                          user.data!;
+
+                      NavigationService.pop(context: context);
+
+                      NavigationService.pushToScreen(
+                        context: context,
+                        routeName: OtherUserProfileScreen.routeName,
+                      );
+                    },
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      spacing: 10,
+                      children: [
+                        UserTile(
+                          profilePicture: user.data!.profilePicture,
+                          userName: user.data!.userName ?? '',
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            size: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
             ],
           ),
         );

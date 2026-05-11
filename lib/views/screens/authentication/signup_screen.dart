@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:locstream/core/error_handlers/exceptions.dart';
 import 'package:locstream/views/screens/authentication/signup_email_verification_screen.dart';
 import 'package:locstream/views/widgets/loading_dialog.dart';
 
@@ -31,16 +35,20 @@ class SignupScreen extends ConsumerStatefulWidget {
 
 class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _emailAddressTextController = TextEditingController();
+  final _userNameTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
   final _confirmPasswordTextController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  Timer? _debouncer;
 
   @override
   void dispose() {
     _emailAddressTextController.dispose();
     _passwordTextController.dispose();
     _confirmPasswordTextController.dispose();
+    _debouncer?.cancel();
 
     super.dispose();
   }
@@ -124,6 +132,89 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           validator: AppTextValidators.isEmail,
         ),
         AppConstants.mediumYSpace,
+        Consumer(
+          builder: (context, ref, child) {
+            final userNameAvailable = ref.watch(
+              checkUserNameAvailabilityViewModel,
+            );
+
+            return Column(
+              spacing: 10,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppInputForm(
+                  title: AppStrings.userName,
+                  controller: _userNameTextController,
+                  hint: 'Minimum of 5 characters',
+                  validator: AppTextValidators.isUserName,
+                  maxLength: 30,
+                  showDefaultMaxLengthWidget: false,
+                  onChanged: (String? str) {
+                    if (str != null &&
+                        str.trim().isNotEmpty &&
+                        str.trim().length >= 5) {
+                      _debouncer?.cancel();
+                      _debouncer = null;
+                      _debouncer = Timer(Duration(seconds: 1), () {
+                        ref
+                            .read(checkUserNameAvailabilityViewModel.notifier)
+                            .check(userName: str.trim().toLowerCase());
+                      });
+                    } else {
+                      _debouncer?.cancel();
+                      _debouncer = null;
+                      ref
+                          .read(checkUserNameAvailabilityViewModel.notifier)
+                          .reset();
+                    }
+                  },
+                  suffixIcon: Consumer(
+                    builder: (context, ref, child) {
+                      if (userNameAvailable.isLoading) {
+                        return CupertinoActivityIndicator();
+                      }
+
+                      if (userNameAvailable.isSuccess) {
+                        return Icon(
+                          Icons.check,
+                          color: AppColors.complimentary,
+                        );
+                      }
+
+                      if (userNameAvailable.exception
+                          is UserNameUnAvailableException) {
+                        return Icon(Icons.close, color: AppColors.redMain);
+                      }
+
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ),
+
+                if (userNameAvailable.isError)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Text(
+                      userNameAvailable.errorMessage ??
+                          AppStrings.somethingWentWrong,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(color: AppColors.redMain),
+                    ),
+                  ),
+
+                if (userNameAvailable.isSuccess)
+                  Text(
+                    'Username is available',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.complimentary,
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+        AppConstants.mediumYSpace,
 
         AppInputForm(
           title: AppStrings.password,
@@ -156,6 +247,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       return;
     }
 
+    if (ref.read(checkUserNameAvailabilityViewModel).isSuccess == false) {
+      AppHelpers.showToast(context, 'Username not verified');
+
+      return;
+    }
+
     AppHelpers.resetState(ref);
 
     ref
@@ -164,6 +261,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           SignupDto(
             email: _emailAddressTextController.text,
             password: _passwordTextController.text,
+            userName: _userNameTextController.text.trim().toLowerCase(),
           ),
         );
   }

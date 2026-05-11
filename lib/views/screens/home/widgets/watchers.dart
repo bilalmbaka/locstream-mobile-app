@@ -4,7 +4,6 @@ import 'package:locstream/core/constants/strings.dart';
 import 'package:locstream/core/services/navigation_service.dart';
 import 'package:locstream/core/styling/text_style.dart';
 import 'package:locstream/core/utils/helpers/dialog_helpers.dart';
-import 'package:locstream/core/utils/helpers/helpers.dart';
 import 'package:locstream/view_models.dart';
 import 'package:locstream/views/screens/home/widgets/user_tile.dart';
 import 'package:locstream/views/widgets/app_text_field.dart';
@@ -57,91 +56,102 @@ class _WatchersState extends ConsumerState<Watchers> {
           child: Column(
             spacing: 10,
             children: [
-              ...List.generate((watchers.data ?? []).length, (index) {
-                final watcher = watchers.data![index];
+              if ((watchers.data ?? []).isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: Text(
+                    'No watchers added yet.',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                )
+              else
+                ...List.generate((watchers.data ?? []).length, (index) {
+                  final watcher = watchers.data![index];
 
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    UserTile(
-                      profilePicture: watcher.data!.profilePicture,
-                      userName: watcher.data!.userName ?? '',
-                    ),
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      UserTile(
+                        profilePicture: watcher.data!.profilePicture,
+                        userName: watcher.data!.userName ?? '',
+                      ),
 
-                    if (watcher.isLoading)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: AppLoadingIndicator(
-                          width: 15,
-                          height: 15,
-                          strokeWidth: .7,
-                        ),
-                      )
-                    else
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: GestureDetector(
-                          onTap: () async {
-                            final remove = await DialogHelpers.showAppDialog<bool?>(
-                              context: context,
-
-                              child: InfoDialog(
-                                coverImage: Icon(Icons.info, size: 90),
-                                title: AppStrings.removeWatcher,
-                                information:
-                                    '${watcher.data!.userName} ${AppStrings.willStopSeeingYourLocation}',
-                                actionButton: Row(
-                                  spacing: 20,
-                                  children: [
-                                    Flexible(
-                                      child: AppOutlinedButton(
-                                        onTap: () {
-                                          NavigationService.pop(
-                                            context: context,
-                                            data: false,
-                                          );
-                                        },
-                                        text: AppStrings.back,
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: PlainButton(
-                                        onTap: () {
-                                          NavigationService.pop(
-                                            context: context,
-                                            data: true,
-                                          );
-                                        },
-                                        text: AppStrings.remove,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-
-                            if (remove == true) {
-                              await ref
-                                  .read(watchersViewModel.notifier)
-                                  .removeWatcher(
+                      if (watcher.isLoading)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: AppLoadingIndicator(
+                            width: 15,
+                            height: 15,
+                            strokeWidth: .7,
+                          ),
+                        )
+                      else
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: GestureDetector(
+                            onTap: () async {
+                              final remove =
+                                  await DialogHelpers.showAppDialog<bool?>(
                                     context: context,
-                                    userId: watcher.data!.id,
+
+                                    child: InfoDialog(
+                                      coverImage: Icon(Icons.info, size: 90),
+                                      title: AppStrings.removeWatcher,
+                                      information:
+                                          '${watcher.data!.userName} ${AppStrings.willStopSeeingYourLocation}',
+                                      actionButton: Row(
+                                        spacing: 20,
+                                        children: [
+                                          Flexible(
+                                            child: AppOutlinedButton(
+                                              onTap: () {
+                                                NavigationService.pop(
+                                                  context: context,
+                                                  data: false,
+                                                );
+                                              },
+                                              text: AppStrings.back,
+                                            ),
+                                          ),
+                                          Flexible(
+                                            child: PlainButton(
+                                              onTap: () {
+                                                NavigationService.pop(
+                                                  context: context,
+                                                  data: true,
+                                                );
+                                              },
+                                              text: AppStrings.remove,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   );
-                            }
-                          },
-                          child: AppTextField(
-                            text: AppStrings.remove,
-                            textStyle: AppTextStyle(
-                              context: context,
-                              fontSize: 11,
-                              color: AppColors.redMain,
-                            ).fw400(),
+
+                              if (remove == true && mounted) {
+                                await ref
+                                    .read(watchersViewModel.notifier)
+                                    .removeWatcher(
+                                      // ignore: use_build_context_synchronously
+                                      context: context,
+                                      userId: watcher.data!.id,
+                                    );
+                              }
+                            },
+                            child: AppTextField(
+                              text: AppStrings.remove,
+                              textStyle: AppTextStyle(
+                                context: context,
+                                fontSize: 11,
+                                color: AppColors.redMain,
+                              ).fw400(),
+                            ),
                           ),
                         ),
-                      ),
-                  ],
-                );
-              }),
+                    ],
+                  );
+                }),
             ],
           ),
         );

@@ -8,8 +8,9 @@ class BaseState<T> {
   final String? errorMessage;
   final String? message;
   final T? data;
+  final dynamic exception;
 
-  BaseState({required this.status, this.errorMessage, this.message, this.data});
+  BaseState({required this.status, this.errorMessage, this.message, this.data, this.exception,});
 
   factory BaseState.initial({T? data}) {
     return BaseState<T>(status: Status.initial, data: data);
@@ -34,6 +35,7 @@ class BaseState<T> {
       status: e is NoNetworkException ? Status.noNetwork : Status.error,
       errorMessage: errorMessage,
       data: data,
+      exception: e,
     );
   }
 

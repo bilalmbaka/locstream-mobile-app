@@ -105,6 +105,7 @@ final suggestUserNameViewModel =
 final checkUserNameAvailabilityViewModel =
     NotifierProvider<CheckUserNameAvailability, UserNameAvailabilityState>(
       () => CheckUserNameAvailability(profileUseCase: _profileUseCase),
+      isAutoDispose: true,
     );
 
 final addNewWatcherViewModel =
