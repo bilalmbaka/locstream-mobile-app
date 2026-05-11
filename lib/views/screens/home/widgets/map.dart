@@ -83,7 +83,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               AppTextField(
-                text: next.errorMessage ?? "Lost internet connection",
+                text: next.errorMessage ?? 'Lost internet connection',
                 textStyle: AppTextStyle(
                   context: context,
                   fontSize: 13,
@@ -262,19 +262,19 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                           ).fw900(),
                           onTap: () => {
                             AppHelpers.launchWebSite(
-                              "https://www.mapbox.com/about/maps",
+                              'https://www.mapbox.com/about/maps',
                             ),
                           },
                         ),
                         TextSourceAttribution(
-                          "OpenStreetMap",
+                          'OpenStreetMap',
                           textStyle: AppTextStyle(
                             context: context,
                             fontSize: 12,
                           ).fw900(),
                           onTap: () => {
                             AppHelpers.launchWebSite(
-                              "https://www.openstreetmap.org/",
+                              'https://www.openstreetmap.org/',
                             ),
                           },
                         ),

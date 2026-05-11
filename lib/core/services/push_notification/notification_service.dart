@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../../error_handlers/exceptions.dart';
@@ -25,7 +27,7 @@ class NotificationService {
 
       if (!permissionGranted) {
         NotificationPermissionException(
-          message: "Permission not granted",
+          message: 'Permission not granted',
           exception: Exception(),
         );
       }
@@ -39,7 +41,8 @@ class NotificationService {
 
       await _localNotifications
           .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin
+          >()
           ?.createNotificationChannel(channel);
     } catch (e) {
       rethrow;
@@ -48,7 +51,7 @@ class NotificationService {
 
   Future<void> initialize({
     required Function(String? payload) onNotificationReceived,
-    String androidDefaultIcon = "@mipmap/ic_launcher",
+    String androidDefaultIcon = '@mipmap/ic_launcher',
   }) async {
     try {
       await _localNotifications.initialize(
@@ -58,10 +61,10 @@ class NotificationService {
         ),
         onDidReceiveNotificationResponse:
             (NotificationResponse? notificationResponse) async {
-          if (notificationResponse?.payload != null) {
-            onNotificationReceived(notificationResponse?.payload);
-          }
-        },
+              if (notificationResponse?.payload != null) {
+                onNotificationReceived(notificationResponse?.payload);
+              }
+            },
       );
     } catch (e) {
       rethrow;
@@ -70,10 +73,17 @@ class NotificationService {
 
   Future<bool> requestPermission() async {
     try {
-      final permission = await _localNotifications
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
-          ?.requestNotificationsPermission();
+      final permission = Platform.isAndroid
+          ? (await _localNotifications
+                .resolvePlatformSpecificImplementation<
+                  AndroidFlutterLocalNotificationsPlugin
+                >()
+                ?.requestNotificationsPermission())
+          : (await _localNotifications
+                .resolvePlatformSpecificImplementation<
+                  IOSFlutterLocalNotificationsPlugin
+                >()
+                ?.requestPermissions(alert: true, badge: true, sound: true));
 
       return permission == true;
     } catch (e) {
@@ -110,5 +120,4 @@ class NotificationService {
   Future<void> cancelAll() {
     return _localNotifications.cancelAll();
   }
-
 }

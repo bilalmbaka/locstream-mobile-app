@@ -14,8 +14,8 @@ import 'package:locstream/views/widgets/app_text_field.dart';
 import 'package:locstream/views/widgets/media/image_view.dart';
 
 class RequiredPermissionScreen extends StatefulWidget {
-  static const routeName = "required-permissions";
-  static const path = "/${routeName}";
+  static const routeName = 'required-permissions';
+  static const path = '/$routeName';
 
   const RequiredPermissionScreen({super.key, this.nextScreen});
 

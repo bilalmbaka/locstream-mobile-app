@@ -13,8 +13,8 @@
         "dev",
         "--target",
         "lib/main_dev.dart",
-        "--dart-define=baseUrl=http://192.168.0.3:5001/api/v1",
-        "--dart-define=socketUrl=ws://192.168.0.3:5000"
+        "--dart-define=baseUrl=http://localhost:3001/api/v1",
+        "--dart-define=socketUrl=ws://localhost:3001"
       ]
     },
     {
@@ -36,8 +36,6 @@
       "type": "dart",
       "flutterMode": "release",
       "args": [
-        "--flavor",
-        "production",
         "--target",
         "main.dart",
         "--dart-define=baseUrl=https:///api/v1",
