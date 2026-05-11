@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:locstream/core/constants/keys.dart';
 
 import '../utils/extensions/double_extensions.dart';
 
@@ -29,8 +30,8 @@ class AppConstants {
   static const baseUrl = String.fromEnvironment('baseUrl');
   static const mapBoxDirectionBaseUrl =
       'https://api.mapbox.com/directions/v5/mapbox';
-  static const mapBoxPublicKey = String.fromEnvironment('mapboxPublicKey');
-  static const mapBoxStyleUrl = String.fromEnvironment('mapboxStyleUrl');
+  static const mapBoxPublicKey = mapboxPublicKey;
+  static const mapBoxStyleUrl = mapboxStyleUrl;
   static const socketUrl = String.fromEnvironment('socketUrl');
   static const flavor = String.fromEnvironment('appFlavor');
 
