@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:locstream/core/utils/extensions/integer_extensions.dart';
 
-import '../../core/constants/images.dart';
 import '../../core/styling/text_style.dart';
 import 'app_text_field.dart';
-import 'media/image_view.dart';
 
 class NoResult extends StatelessWidget {
   const NoResult({
@@ -34,11 +31,8 @@ class NoResult extends StatelessWidget {
         AppTextField(
           text: message,
           textAlign: TextAlign.center,
-          textStyle: AppTextStyle(
-            context: context,
-            fontSize: 13,
-          ).fw600(),
-        )
+          textStyle: AppTextStyle(context: context, fontSize: 13).fw600(),
+        ),
       ],
     );
   }

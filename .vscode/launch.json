@@ -13,8 +13,8 @@
         "dev",
         "--target",
         "lib/main_dev.dart",
-        "--dart-define=baseUrl=http://192.168.0.102:3001/api/v1",
-        "--dart-define=socketUrl=ws://192.168.0.102:3001"
+        "--dart-define=baseUrl=http://127.0.0.1:3001/api/v1",
+        "--dart-define=socketUrl=ws://127.0.0.1:3001"
       ]
     },
     {

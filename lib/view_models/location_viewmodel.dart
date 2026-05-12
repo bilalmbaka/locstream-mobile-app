@@ -1,9 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:locstream/core/error_handlers/exception_handler.dart';
 import 'package:locstream/core/utils/base_state.dart';
 import 'package:locstream/data/model/location_models.dart';
-import 'package:locstream/domain/entities/profile_dto.dart';
 import 'package:locstream/domain/use_case/profile_usecase.dart';
 
 import '../../../core/services/location_service.dart';
@@ -66,7 +65,9 @@ class LocationViewModel extends Notifier<LocationState> {
   }
 
   void setLocation({required double latitude, required double longitude}) {
-    print("setting location in view model to lat $latitude and lng $longitude");
+    if (kDebugMode) {
+      print('setting location in view model to lat $latitude and lng $longitude');
+    }
 
     state = LocationState.success(LocationModel(lat: latitude, lng: longitude));
   }

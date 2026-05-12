@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:locstream/core/error_handlers/exceptions.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -87,16 +88,29 @@ class AppHelpers {
     required FileType fileType,
     List<String>? fileTypes,
     bool allowMultiples = false,
+    int maxSize = 5000000, //in bytes
   }) async {
-    final media = await FilePicker.platform.pickFiles(
-      allowedExtensions: fileTypes,
-      type: fileType,
-      allowMultiple: allowMultiples,
-    );
+    try {
+      final media = await FilePicker.platform.pickFiles(
+        allowedExtensions: fileTypes,
+        type: fileType,
+        allowMultiple: allowMultiples,
+      );
 
-    if (media == null) return [];
+      if (media == null) return [];
 
-    return List<File>.from(media.xFiles.map((e) => File(e.path)));
+      for (PlatformFile file in media.files) {
+        if (file.size > maxSize) {
+          throw TooLargeException();
+        }
+      }
+
+      return List<File>.from(media.xFiles.map((e) => File(e.path)));
+    } catch (e) {
+      AppHelpers.printToLog('File picker exception ==> $e');
+
+      rethrow;
+    }
   }
 
   static void forceLogout({required String errorMessage}) {
@@ -155,6 +169,7 @@ class AppHelpers {
     required String text,
   }) async {
     await Clipboard.setData(ClipboardData(text: text));
+    // ignore: use_build_context_synchronously
     AppHelpers.showToast(context, 'Copied to clipboard');
   }
 
@@ -205,7 +220,7 @@ class AppHelpers {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     final flavor = AppConstants.flavor;
     String version = packageInfo.version;
-    String buildNumber = packageInfo.buildNumber;
+    // String buildNumber = packageInfo.buildNumber;
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
@@ -224,7 +239,7 @@ class AppHelpers {
         flavor: flavor,
         osVersion: iosInfo.systemVersion,
         os: 'IOS',
-        appVersion: '$version.$buildNumber',
+        appVersion: version,
         deviceMake: iosInfo.modelName,
       );
     }

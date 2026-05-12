@@ -77,28 +77,32 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   Widget build(BuildContext context) {
     ref.listen(watchingViewModel, (previous, next) {
       if (next.isError) {
-        AppHelpers.showSnackBar(
-          context: context,
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AppTextField(
-                text: next.errorMessage ?? 'Lost internet connection',
-                textStyle: AppTextStyle(
-                  context: context,
-                  fontSize: 13,
-                  color: AppColors.primaryColor,
-                ).fw900(),
-              ),
+        try {
+          AppHelpers.showSnackBar(
+            context: context,
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppTextField(
+                  text: next.errorMessage ?? 'Lost internet connection',
+                  textStyle: AppTextStyle(
+                    context: context,
+                    fontSize: 13,
+                    color: AppColors.primaryColor,
+                  ).fw900(),
+                ),
 
-              AppLoadingIndicator(
-                width: 15,
-                height: 15,
-                color: AppColors.primaryColor,
-              ),
-            ],
-          ),
-        );
+                AppLoadingIndicator(
+                  width: 15,
+                  height: 15,
+                  color: AppColors.primaryColor,
+                ),
+              ],
+            ),
+          );
+        } catch (e) {
+          AppHelpers.printToLog('Error showing snackbar ==> $e');
+        }
       }
 
       if (next.isSuccess) {
@@ -113,6 +117,36 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           Align(
             alignment: Alignment.bottomRight,
             child: MapZoomButton(mapController: _mapController),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: GestureDetector(
+              onTap: () {
+                if (ref.read(watchersViewModel).isLoading) return;
+
+                ref.read(watchersViewModel.notifier).fetch(showLoading: true);
+              },
+              child: Container(
+                margin: EdgeInsets.only(left: 20, bottom: 50),
+                child: CircleAvatar(
+                  backgroundColor: AppColors.white,
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      final status = ref.watch(watchersViewModel);
+
+                      if (status.isLoading || status.isInitial) {
+                        return CircularProgressIndicator();
+                      }
+
+                      return Icon(
+                        Icons.replay_outlined,
+                        color: AppColors.dialogColor,
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
           ),
           // Consumer(
           //   builder: (context, ref, child) {
@@ -237,7 +271,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 5.0, bottom: 4.0),
+                    padding: const EdgeInsets.only(left: 20.0, bottom: 13.0),
                     child: SizedBox(
                       width: 70,
                       child: LogoSourceAttribution(
@@ -249,7 +283,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 5.0, bottom: 8.0),
+                    padding: const EdgeInsets.only(
+                      right: 20.0,
+                      bottom: 20.0,
+                      left: 20.0,
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       spacing: 5,

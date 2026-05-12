@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:locstream/views/screens/authentication/set_username.dart';
 import 'package:locstream/views/screens/home/screens/home.dart';
 import 'package:locstream/views/widgets/app_bars/general_app_bar.dart';
 

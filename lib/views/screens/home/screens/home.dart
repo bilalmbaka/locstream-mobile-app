@@ -82,6 +82,7 @@ class _HomeState extends ConsumerState<Home> {
             child: GestureDetector(
               onTap: () => Scaffold.of(context).openEndDrawer(),
               child: Container(
+                margin: EdgeInsets.only(top: 15),
                 decoration: BoxDecoration(
                   color: AppColors.ladingPageGradientGreen,
                   shape: BoxShape.circle,

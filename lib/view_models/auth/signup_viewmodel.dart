@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:locstream/core/error_handlers/exceptions.dart';
 
 import '../../core/error_handlers/exception_handler.dart';
 import '../../core/utils/base_state.dart';

@@ -8,8 +8,10 @@ import '../../core/services/push_notification/push_notification_service.dart';
 import '../../domain/use_case/profile_usecase.dart';
 
 class PushNotificationViewModel extends Notifier<void> {
-  PushNotificationViewModel(
-      {required this.pushNotificationService, required this.profileUseCase});
+  PushNotificationViewModel({
+    required this.pushNotificationService,
+    required this.profileUseCase,
+  });
 
   final PushNotificationService pushNotificationService;
   final ProfileUseCase profileUseCase;
@@ -22,8 +24,7 @@ class PushNotificationViewModel extends Notifier<void> {
       await pushNotificationService.initialize();
       await _fetchAndUpdateToken();
     } catch (e, s) {
-      final errorMessage = AppExceptionHandler.handleException(e,
-          stackTrace: s, sendToLogger: true);
+      AppExceptionHandler.handleException(e, stackTrace: s, sendToLogger: true);
     }
   }
 
@@ -38,8 +39,11 @@ class PushNotificationViewModel extends Notifier<void> {
         });
       }
 
-      final errorMessage = AppExceptionHandler.handleException(e,
-          stackTrace: s, sendToLogger: (e is ApiException) == false);
+      AppExceptionHandler.handleException(
+        e,
+        stackTrace: s,
+        sendToLogger: (e is ApiException) == false,
+      );
     }
   }
 
@@ -47,8 +51,7 @@ class PushNotificationViewModel extends Notifier<void> {
     try {
       await pushNotificationService.destroyMessagingToken();
     } catch (e, s) {
-      final errorMessage = AppExceptionHandler.handleException(e,
-          stackTrace: s, sendToLogger: true);
+      AppExceptionHandler.handleException(e, stackTrace: s, sendToLogger: true);
     }
   }
 }

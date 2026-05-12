@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:locstream/core/constants/constants.dart';
 import 'package:locstream/data/data_sources/local_data_sources/auth_local_data_source.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -37,11 +38,15 @@ class WatchingUserLocationsSocket {
       );
 
       socket?.onConnect((_) {
-        print("Connected to socket");
+        if (kDebugMode) {
+          print('Connected to socket');
+        }
       });
 
       socket!.on(AppConstants.locationSharesSocketEvent, (data) {
-        print("connected data is =========> ${data}");
+        if (kDebugMode) {
+          print('connected data is =========> $data');
+        }
 
         try {
           final watching = data as List<dynamic>;
@@ -56,13 +61,17 @@ class WatchingUserLocationsSocket {
               )),
             );
           }
-        }catch(e) {
-          print("error in ${AppConstants.locationSharesSocketEvent} is ${e}");
+        } catch (e) {
+          if (kDebugMode) {
+            print('error in ${AppConstants.locationSharesSocketEvent} is $e');
+          }
         }
       });
 
       socket!.on(AppConstants.locationChangeSocketEvent, (data) {
-        print("Location change event =======> ${data}");
+        if (kDebugMode) {
+          print('Location change event =======> $data');
+        }
 
         final user = User.fromJson(data);
         streamController.sink.add(
@@ -74,21 +83,28 @@ class WatchingUserLocationsSocket {
       });
 
       socket?.onDisconnect((error) {
-        print("disconnected error ${error}");
+        if (kDebugMode) {
+          print('disconnected error $error');
+        }
+
         streamController.sink.add(
           (WatchingSocketEvent(event: AppConstants.connectionErrorEvent)),
         );
       });
 
       socket?.onConnectError((error) {
-        print("connection error ${error}");
+        if (kDebugMode) {
+          print('connection error $error');
+        }
         streamController.sink.addError(
           (WatchingSocketEvent(event: AppConstants.connectionErrorEvent)),
         );
       });
 
       socket?.onReconnect((reconnect) {
-        print("reconnection error ${reconnect}");
+        if (kDebugMode) {
+          print('reconnection error $reconnect');
+        }
         streamController.sink.add(
           (WatchingSocketEvent(event: AppConstants.reconnectedEvent)),
         );

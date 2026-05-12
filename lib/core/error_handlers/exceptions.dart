@@ -105,3 +105,7 @@ class NotificationException implements Exception {
     return message;
   }
 }
+
+class TooLargeException implements Exception {
+
+}

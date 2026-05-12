@@ -4,8 +4,6 @@ import 'package:locstream/data/model/user_model.dart';
 import '../../core/constants/strings.dart';
 import '../../core/error_handlers/exception_handler.dart';
 import '../../core/utils/base_state.dart';
-import '../../data/model/signup_response_model.dart';
-import '../../domain/entities/auth_dto.dart';
 import '../../domain/use_case/auth_usecase.dart';
 
 typedef SignupOtpState = BaseState<User>;

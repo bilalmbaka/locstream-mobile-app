@@ -1,12 +1,17 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:locstream/core/constants/constants.dart';
 import 'package:locstream/core/constants/strings.dart';
+import 'package:locstream/core/error_handlers/exceptions.dart';
+import 'package:locstream/core/styling/colors.dart';
 import 'package:locstream/core/styling/text_style.dart';
+import 'package:locstream/core/utils/forms/text_validators.dart';
 import 'package:locstream/core/utils/helpers/helpers.dart';
 import 'package:locstream/domain/entities/profile_dto.dart';
 import 'package:locstream/view_models.dart';
@@ -31,13 +36,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   final _emailTextController = TextEditingController();
 
   File? profilePicture;
+  Timer? _debouncer;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final profile = ref.read(profileViewModel).data!;
-      _userNameTextController.text = profile.userName!;
       _emailTextController.text = profile.email;
     });
   }
@@ -82,14 +87,24 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   Center(
                     child: GestureDetector(
                       onTap: () async {
-                        final image = await AppHelpers.pickMedia(
-                          fileType: FileType.image,
-                        );
+                        try {
+                          final image = await AppHelpers.pickMedia(
+                            fileType: FileType.image,
+                          );
 
-                        if (image.isNotEmpty) {
-                          setState(() {
-                            profilePicture = image.first;
-                          });
+                          if (image.isNotEmpty) {
+                            setState(() {
+                              profilePicture = image.first;
+                            });
+                          }
+                        } catch (e) {
+                          if (e is TooLargeException) {
+                            AppHelpers.showToast(
+                              // ignore: use_build_context_synchronously
+                              context,
+                              'Max file size is 5MB',
+                            );
+                          }
                         }
                       },
                       child: Column(
@@ -106,7 +121,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                             height: 150,
                           ),
                           AppTextField(
-                            text: "Change",
+                            text: 'Change',
                             textStyle: AppTextStyle(
                               context: context,
                               fontSize: 12,
@@ -124,9 +139,96 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     title: AppStrings.emailAddress,
                   ),
                   AppConstants.mediumYSpace,
-                  AppInputForm(
-                    controller: _userNameTextController,
-                    title: AppStrings.userName,
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final userNameAvailable = ref.watch(
+                        checkUserNameAvailabilityViewModel,
+                      );
+
+                      return Column(
+                        spacing: 10,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppInputForm(
+                            title: AppStrings.userName,
+                            controller: _userNameTextController,
+                            hint: profile.userName!,
+                            validator: AppTextValidators.isUserName,
+                            maxLength: 30,
+                            showDefaultMaxLengthWidget: false,
+                            onChanged: (String? str) {
+                              if (str != null &&
+                                  str.trim().isNotEmpty &&
+                                  str.trim().length >= 5) {
+                                _debouncer?.cancel();
+                                _debouncer = null;
+                                _debouncer = Timer(Duration(seconds: 1), () {
+                                  ref
+                                      .read(
+                                        checkUserNameAvailabilityViewModel
+                                            .notifier,
+                                      )
+                                      .check(
+                                        userName: str.trim().toLowerCase(),
+                                      );
+                                });
+                              } else {
+                                _debouncer?.cancel();
+                                _debouncer = null;
+                                ref
+                                    .read(
+                                      checkUserNameAvailabilityViewModel
+                                          .notifier,
+                                    )
+                                    .reset();
+                              }
+                            },
+                            suffixIcon: Consumer(
+                              builder: (context, ref, child) {
+                                if (userNameAvailable.isLoading) {
+                                  return CupertinoActivityIndicator();
+                                }
+
+                                if (userNameAvailable.isSuccess) {
+                                  return Icon(
+                                    Icons.check,
+                                    color: AppColors.complimentary,
+                                  );
+                                }
+
+                                if (userNameAvailable.exception
+                                    is UserNameUnAvailableException) {
+                                  return Icon(
+                                    Icons.close,
+                                    color: AppColors.redMain,
+                                  );
+                                }
+
+                                return const SizedBox.shrink();
+                              },
+                            ),
+                          ),
+
+                          if (userNameAvailable.isError)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(
+                                userNameAvailable.errorMessage ??
+                                    AppStrings.somethingWentWrong,
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(color: AppColors.redMain),
+                              ),
+                            ),
+
+                          if (userNameAvailable.isSuccess)
+                            Text(
+                              'Username is available',
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(color: AppColors.complimentary),
+                            ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
@@ -135,19 +237,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             Consumer(
               builder: (context, ref, child) {
                 return PlainButton(
-                  onTap: () {
-                    ref
-                        .read(editProfileViewModel.notifier)
-                        .editProfile(
-                          ProfileDto(
-                            profilePicture: profilePicture?.path,
-                            userName:
-                                _userNameTextController.text == profile.userName
-                                ? null
-                                : _userNameTextController.text,
-                          ),
-                        );
-                  },
+                  onTap: _onTap,
                   isLoading: ref.watch(editProfileViewModel).isLoading,
                   text: AppStrings.edit,
                 );
@@ -157,5 +247,30 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         ),
       ),
     );
+  }
+
+  void _onTap() {
+    final profile = ref.read(profileViewModel).data!;
+
+    if (_userNameTextController.text.trim().isNotEmpty) {
+      if (ref.read(checkUserNameAvailabilityViewModel).isSuccess == false) {
+        AppHelpers.showToast(context, 'Username not verified');
+
+        return;
+      }
+    }
+
+    ref
+        .read(editProfileViewModel.notifier)
+        .editProfile(
+          ProfileDto(
+            profilePicture: profilePicture?.path,
+            userName:
+                _userNameTextController.text.trim().toLowerCase() ==
+                    profile.userName!.toLowerCase()
+                ? null
+                : _userNameTextController.text.trim().toLowerCase(),
+          ),
+        );
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:locstream/core/constants/constants.dart';
 import 'package:locstream/data/data_sources/remote_data_sources/watching_location_socket.dart';
@@ -37,10 +38,16 @@ class WatchingViewModel extends Notifier<WatchingState> {
         .stream
         .listen(
           (WatchingSocketEvent data) {
-            print('In view model socket data stream ==========> ${data.event}');
-            print(
-              'In view model socket data stream user is ========> ${data.user?.toJson()}',
-            );
+            if (kDebugMode) {
+              print(
+                'In view model socket data stream ==========> ${data.event}',
+              );
+            }
+            if (kDebugMode) {
+              print(
+                'In view model socket data stream user is ========> ${data.user?.toJson()}',
+              );
+            }
 
             if (data.event == AppConstants.reconnectedEvent) {
               state = WatchingState.success(state.data ?? <BaseState<User>>[]);

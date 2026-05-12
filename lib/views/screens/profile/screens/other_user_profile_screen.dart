@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +16,7 @@ import 'package:locstream/views/widgets/app_bars/general_app_bar.dart';
 import 'package:locstream/views/widgets/app_text_field.dart';
 import 'package:locstream/views/widgets/buttons/plain_button.dart';
 import 'package:locstream/views/widgets/profile_picture.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OtherUserProfileScreen extends ConsumerStatefulWidget {
   static const routeName = 'other-user-profile';
@@ -147,9 +150,10 @@ class _OtherUserProfileScreenState
                     AppConstants.extraLargeYSpace,
 
                     PlainButton(
-                      onTap: () {
-                        AppHelpers.showToast(context, AppStrings.comingSoon);
-                      },
+                      onTap: () => _journeyToUser(
+                        latitude: profile.currentLocation?.lat,
+                        longitude: profile.currentLocation?.lat,
+                      ),
                       text: AppStrings.journeyToUser,
                     ),
 
@@ -192,5 +196,28 @@ class _OtherUserProfileScreenState
         ),
       ],
     );
+  }
+
+  void _journeyToUser({
+    required double? latitude,
+    required double? longitude,
+  }) async {
+    try {
+      if (latitude == null || longitude == null) throw Exception();
+
+      final uri = Platform.isAndroid
+          ? Uri.parse('google.navigation:q=$latitude+$longitude')
+          : Uri.parse(
+              'https://maps.apple.com/?daddr=$latitude,$longitude&dirflg=d',
+            );
+
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      if (mounted) {
+        AppHelpers.showToast(context, 'Could not open maps');
+      }
+    }
   }
 }
