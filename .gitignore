@@ -49,3 +49,4 @@ keys.dart
 .vscode
 
 .env.staging
+.env.production
