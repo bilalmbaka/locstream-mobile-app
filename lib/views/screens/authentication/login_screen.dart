@@ -42,13 +42,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(logoutViewModel.notifier).logout();
-
       await SharedPrefsService().delete(
         key: AppConstants.backgroundLocationUpdateKey,
       );
 
       await AppForegroundService.stop();
+
+      await ref.read(logoutViewModel.notifier).logout();
     });
   }
 

@@ -11,8 +11,11 @@ import 'package:locstream/domain/entities/profile_dto.dart';
 import 'package:locstream/view_models.dart';
 import 'package:locstream/views/screens/home/widgets/drawer.dart';
 import 'package:locstream/views/screens/home/widgets/map.dart';
+import 'package:locstream/views/screens/home/widgets/watchers_tile.dart';
 
 import '../../../../core/services/location_task_handler.dart';
+
+final isTrayOpen = ValueNotifier<bool>(false);
 
 class Home extends ConsumerStatefulWidget {
   static const routeName = 'home';
@@ -89,6 +92,16 @@ class _HomeState extends ConsumerState<Home> {
                 ),
                 child: EndDrawerButton(),
               ),
+            ),
+          ),
+          ValueListenableBuilder(
+            valueListenable: isTrayOpen,
+            builder: (context, isTrayOpen, _) => AnimatedPositioned(
+              duration: Duration(milliseconds: 500),
+              left: isTrayOpen ? 0 : -120,
+              bottom: 0,
+              top: 0,
+              child: Center(child: WatchersTile(active: isTrayOpen)),
             ),
           ),
         ],

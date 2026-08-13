@@ -9,7 +9,12 @@ import UIKit
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
 
-	UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
+    //Flutter foreground task.
+    SwiftFlutterForegroundTaskPlugin.setPluginRegistrantCallback { registry in
+      GeneratedPluginRegistrant.register(with: registry)
+    }
+
+	  UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

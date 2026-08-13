@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:locstream/core/constants/constants.dart';
 import 'package:locstream/core/services/api_service.dart';
@@ -19,6 +20,12 @@ class LocationTaskHandler extends TaskHandler {
   @override
   Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
     LocationService().locationStream().listen((location) async {
+      if (kDebugMode) {
+        print(
+          'New location streamed in foreground handler ${location.latitude}, ${location.longitude}',
+        );
+      }
+
       final locationModel = LocationModel(
         lat: location.latitude,
         lng: location.longitude,
@@ -34,28 +41,30 @@ class LocationTaskHandler extends TaskHandler {
       // int time = 0;
 
       // if (time == 5) {
-        try {
-          final accessToken = await AuthLocalDataSource().getAuthToken();
+      try {
+        final accessToken = await AuthLocalDataSource().getAuthToken();
 
-          if (accessToken == null) {
-            return;
-          }
-
-          final apiService = ApiService(
-            baseUrl: '${AppConstants.baseUrl}/user',
-            watchUserState: false,
-          );
-
-          await apiService.patch(
-            '/update-profile',
-            data: {'currentLocation': locationModel.toJson()},
-          );
-        } catch (e) {
-          print('Could not post location in foreground service, $e');
-          //DO NOTHING
+        if (accessToken == null) {
+          return;
         }
 
-        // time = 0;
+        final apiService = ApiService(
+          baseUrl: '${AppConstants.baseUrl}/user',
+          watchUserState: false,
+        );
+
+        await apiService.patch(
+          '/update-profile',
+          data: {'currentLocation': locationModel.toJson()},
+        );
+      } catch (e) {
+        if (kDebugMode) {
+          print('Could not post location in foreground service, $e');
+        }
+        //DO NOTHING
+      }
+
+      // time = 0;
       // }
 
       // _previousLocation = locationModel;
@@ -69,36 +78,48 @@ class LocationTaskHandler extends TaskHandler {
   // Called based on the eventAction set in ForegroundTaskOptions.
   @override
   void onRepeatEvent(DateTime timestamp) {
-    print('onRepeatEvent');
+    if (kDebugMode) {
+      print('onRepeatEvent');
+    }
   }
 
   // Called when the task is destroyed.
   @override
   Future<void> onDestroy(DateTime timestamp, bool isTimeout) async {
-    print('onDestroy(isTimeout: $isTimeout)');
+    if (kDebugMode) {
+      print('onDestroy(isTimeout: $isTimeout)');
+    }
   }
 
   // Called when data is sent using `FlutterForegroundTask.sendDataToTask`.
   @override
   void onReceiveData(Object data) {
-    print('onReceiveData: $data');
+    if (kDebugMode) {
+      print('onReceiveData: $data');
+    }
   }
 
   // Called when the notification button is pressed.
   @override
   void onNotificationButtonPressed(String id) {
-    print('onNotificationButtonPressed: $id');
+    if (kDebugMode) {
+      print('onNotificationButtonPressed: $id');
+    }
   }
 
   // Called when the notification itself is pressed.
   @override
   void onNotificationPressed() {
-    print('onNotificationPressed');
+    if (kDebugMode) {
+      print('onNotificationPressed');
+    }
   }
 
   // Called when the notification itself is dismissed.
   @override
   void onNotificationDismissed() {
-    print('onNotificationDismissed');
+    if (kDebugMode) {
+      print('onNotificationDismissed');
+    }
   }
 }

@@ -33,6 +33,9 @@ ValueNotifier<TileLayer> tile = ValueNotifier(
 );
 
 ValueNotifier<bool> isNoInternetSnackBarActive = ValueNotifier(false);
+ValueNotifier<MapController> mapController = ValueNotifier<MapController>(
+  MapController(),
+);
 
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({super.key});
@@ -42,8 +45,6 @@ class MapScreen extends ConsumerStatefulWidget {
 }
 
 class _MapScreenState extends ConsumerState<MapScreen> {
-  final MapController _mapController = MapController();
-
   // bool _moveCameraToLocation = true;
 
   @override
@@ -59,18 +60,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         final currentLocation = ref.read(locationViewModel).data!;
 
         AppHelpers.moveCameraToLocation(
-          _mapController,
           currentLocation.lat,
           currentLocation.lng,
         );
       });
     });
-  }
-
-  @override
-  void dispose() {
-    _mapController.dispose();
-    super.dispose();
   }
 
   @override
@@ -114,10 +108,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       body: Stack(
         children: [
           _map(),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: MapZoomButton(mapController: _mapController),
-          ),
+          Align(alignment: Alignment.bottomRight, child: MapZoomButton()),
           Align(
             alignment: Alignment.bottomLeft,
             child: GestureDetector(
@@ -212,7 +203,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         return Stack(
           children: [
             FlutterMap(
-              mapController: _mapController,
+              mapController: mapController.value,
               options: MapOptions(
                 initialCenter: const LatLng(6.6018, 3.3515),
                 initialZoom: 13.0,

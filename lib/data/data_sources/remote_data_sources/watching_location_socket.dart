@@ -87,7 +87,7 @@ class WatchingUserLocationsSocket {
           print('disconnected error $error');
         }
 
-        streamController.sink.add(
+        streamController.sink.addError(
           (WatchingSocketEvent(event: AppConstants.connectionErrorEvent)),
         );
       });

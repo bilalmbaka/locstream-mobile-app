@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:locstream/core/error_handlers/exceptions.dart';
+import 'package:locstream/views/screens/home/widgets/map.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -194,15 +195,14 @@ class AppHelpers {
   }
 
   static void moveCameraToLocation(
-    MapController mapController,
     double latitude,
     double longitude, {
     double? zoom,
   }) {
-    final zoomValue = zoom ?? mapController.camera.zoom;
+    final zoomValue = zoom ?? mapController.value.camera.zoom;
     final position = LatLng(latitude, longitude);
 
-    mapController.move(position, zoomValue);
+    mapController.value.move(position, zoomValue);
   }
 
   static void launchWebSite(String url) async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:locstream/core/utils/helpers/helpers.dart';
+import 'package:locstream/views/screens/home/widgets/map.dart';
 import 'package:locstream/views/widgets/loading_indicator.dart';
 
 import '../../../../core/constants/constants.dart';
@@ -9,9 +9,7 @@ import '../../../../core/styling/colors.dart';
 import '../../../../view_models.dart';
 
 class MapZoomButton extends ConsumerWidget {
-  const MapZoomButton({super.key, required this.mapController});
-
-  final MapController mapController;
+  const MapZoomButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,7 +35,6 @@ class MapZoomButton extends ConsumerWidget {
                             .data!;
 
                         AppHelpers.moveCameraToLocation(
-                          mapController,
                           currentLocation.lat,
                           currentLocation.lng,
                         );
@@ -98,13 +95,15 @@ class MapZoomButton extends ConsumerWidget {
 
   void zoomInOut({required bool zoomIn}) {
     final zoom = zoomIn
-        ? mapController.camera.zoom + 1
-        : mapController.camera.zoom - 1;
+        ? mapController.value.camera.zoom + 1
+        : mapController.value.camera.zoom - 1;
 
-    final position = mapController.camera.focusedZoomCenter(Offset.zero, zoom);
+    final position = mapController.value.camera.focusedZoomCenter(
+      Offset.zero,
+      zoom,
+    );
 
     AppHelpers.moveCameraToLocation(
-      mapController,
       position.latitude,
       position.longitude,
       zoom: zoom,
