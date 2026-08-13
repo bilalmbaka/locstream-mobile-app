@@ -76,35 +76,37 @@ class _HomeState extends ConsumerState<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: HomeEndDrawer(),
-      body: Stack(
-        children: [
-          MapScreen(),
-          Positioned(
-            top: 40,
-            right: 20,
-            child: GestureDetector(
-              onTap: () => Scaffold.of(context).openEndDrawer(),
-              child: Container(
-                margin: EdgeInsets.only(top: 15),
-                decoration: BoxDecoration(
-                  color: AppColors.ladingPageGradientGreen,
-                  shape: BoxShape.circle,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            MapScreen(),
+            Positioned(
+              top: 20,
+              right: 20,
+              child: GestureDetector(
+                onTap: () => Scaffold.of(context).openEndDrawer(),
+                child: Container(
+                  margin: EdgeInsets.only(top: 15),
+                  decoration: BoxDecoration(
+                    color: AppColors.ladingPageGradientGreen,
+                    shape: BoxShape.circle,
+                  ),
+                  child: EndDrawerButton(),
                 ),
-                child: EndDrawerButton(),
               ),
             ),
-          ),
-          ValueListenableBuilder(
-            valueListenable: isTrayOpen,
-            builder: (context, isTrayOpen, _) => AnimatedPositioned(
-              duration: Duration(milliseconds: 500),
-              left: isTrayOpen ? 0 : -120,
-              bottom: 0,
-              top: 0,
-              child: Center(child: WatchersTile(active: isTrayOpen)),
+            ValueListenableBuilder(
+              valueListenable: isTrayOpen,
+              builder: (context, isTrayOpen, _) => AnimatedPositioned(
+                duration: Duration(milliseconds: 500),
+                left: isTrayOpen ? 0 : -120,
+                bottom: 0,
+                top: 0,
+                child: Center(child: WatchersTile(active: isTrayOpen)),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
