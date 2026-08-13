@@ -90,14 +90,14 @@ class HomeEndDrawer extends ConsumerWidget {
                     routeName: SettingsHome.routeName,
                   );
                 },
-                icon: Icon(Icons.settings,size: 20,),
+                icon: Icon(Icons.settings, size: 20),
               ),
             ),
           ],
         ),
       ),
       footer: Padding(
-        padding: const EdgeInsets.only(bottom: 40.0),
+        padding: const EdgeInsets.only(bottom: 70.0),
         child: GestureDetector(
           onTap: () {
             NavigationService.jumpToScreen(

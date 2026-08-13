@@ -26,8 +26,7 @@
         "staging",
         "--target",
         "lib/main_staging.dart",
-        "--dart-define=baseUrl=https://locstream-staging.up.railway.app/api/v1",
-        "--dart-define=cryptoSocketUrl=wss://locstream-staging.up.railway.app"
+        "--dart-define-from-file=.env.staging"
       ]
     },
     {
@@ -39,7 +38,7 @@
         "--target",
         "main.dart",
         "--dart-define=baseUrl=https:///api/v1",
-        "--dart-define=cryptoSocketUrl=wss://"
+        "--dart-define=socketUrl=wss://"
       ]
     }
   ]

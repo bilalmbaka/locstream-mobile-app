@@ -27,91 +27,93 @@ class SettingsHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppAppBar(title: AppStrings.settings.firstLetterToUpperCase()),
-      body: AppHelpers.wrapChildWithLayoutBuilder(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          spacing: 30,
-          children: [
-            Column(
-              spacing: 20,
-              children: [
-                ActionTile(
-                  title: AppStrings.changePassword,
-                  onTap: () {
-                    NavigationService.pushToScreen(
-                      context: context,
-                      routeName: ChangePasswordScreen.routeName,
-                    );
-                  },
-                ),
-                ActionTile(
-                  title: AppStrings.contactSupport,
-                  onTap: () {
-                    NavigationService.pushToScreen(
-                      context: context,
-                      routeName: ContactSupportScreen.routeName,
-                    );
-                  },
-                ),
-                ActionTile(
-                  title: AppStrings.deleteAccount,
-                  onTap: () {
-                    NavigationService.pushToScreen(
-                      context: context,
-                      routeName: DeleteAccountScreen.routeName,
-                    );
-                  },
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  spacing: 5,
-                  children: [
-                    AppTextField(
-                      text: AppStrings.backgroundLocationUpdates,
-                      textStyle: AppTextStyle(
+      body: SafeArea(
+        child: AppHelpers.wrapChildWithLayoutBuilder(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            spacing: 30,
+            children: [
+              Column(
+                spacing: 20,
+                children: [
+                  ActionTile(
+                    title: AppStrings.changePassword,
+                    onTap: () {
+                      NavigationService.pushToScreen(
                         context: context,
-                        fontSize: 13,
-                      ).fw500(),
-                    ),
+                        routeName: ChangePasswordScreen.routeName,
+                      );
+                    },
+                  ),
+                  ActionTile(
+                    title: AppStrings.contactSupport,
+                    onTap: () {
+                      NavigationService.pushToScreen(
+                        context: context,
+                        routeName: ContactSupportScreen.routeName,
+                      );
+                    },
+                  ),
+                  ActionTile(
+                    title: AppStrings.deleteAccount,
+                    onTap: () {
+                      NavigationService.pushToScreen(
+                        context: context,
+                        routeName: DeleteAccountScreen.routeName,
+                      );
+                    },
+                  ),
 
-                    SizedBox(
-                      height: 20,
-                      child: ValueListenableBuilder(
-                        valueListenable: sendLocationInBackground,
-                        builder: (context, send, child) => Switch(
-                          value: send,
-                          padding: EdgeInsets.zero,
-                          onChanged: toggleBackgroundLocationUpdates,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    spacing: 5,
+                    children: [
+                      AppTextField(
+                        text: AppStrings.backgroundLocationUpdates,
+                        textStyle: AppTextStyle(
+                          context: context,
+                          fontSize: 13,
+                        ).fw500(),
+                      ),
+
+                      SizedBox(
+                        height: 20,
+                        child: ValueListenableBuilder(
+                          valueListenable: sendLocationInBackground,
+                          builder: (context, send, child) => Switch(
+                            value: send,
+                            padding: EdgeInsets.zero,
+                            onChanged: toggleBackgroundLocationUpdates,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                    ],
+                  ),
+                ],
+              ),
 
-            FutureBuilder(
-              future: fetchAppInfo(),
-              builder: (context, state) {
-                if (state.hasData) {
-                  final data = state.data;
+              FutureBuilder(
+                future: fetchAppInfo(),
+                builder: (context, state) {
+                  if (state.hasData) {
+                    final data = state.data;
 
-                  if (data == null) return Offstage();
+                    if (data == null) return Offstage();
 
-                  return AppTextField(
-                    text: data.appVersion,
-                    textStyle: AppTextStyle(
-                      context: context,
-                      fontSize: 12,
-                    ).fw900(),
-                  );
-                }
+                    return AppTextField(
+                      text: data.appVersion,
+                      textStyle: AppTextStyle(
+                        context: context,
+                        fontSize: 12,
+                      ).fw900(),
+                    );
+                  }
 
-                return Offstage();
-              },
-            ),
-          ],
+                  return Offstage();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

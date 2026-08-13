@@ -47,3 +47,5 @@ app.*.map.json
 keys.dart
 
 .vscode
+
+.env.staging
