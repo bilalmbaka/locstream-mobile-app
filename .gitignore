@@ -50,3 +50,4 @@ keys.dart
 
 .env.staging
 .env.production
+.env.dev
